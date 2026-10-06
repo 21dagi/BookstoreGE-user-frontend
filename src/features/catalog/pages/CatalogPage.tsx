@@ -87,13 +87,12 @@ const CatalogPage: React.FC = () => {
       {/* ── Sticky Header ─────────────────────────────────────────── */}
       <header className="sticky top-0 z-40 bg-[#F8F7F5]/90 backdrop-blur-md border-b border-[#EFEAE3]/70 px-5 pt-4 pb-2">
         <div className="flex items-center justify-between">
-          {/* Brand */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-orange-50 border border-orange-200/70 flex items-center justify-center text-[#7a2330] shadow-sm">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-              </svg>
-            </div>
+            <img
+              src="/app-logo.png"
+              alt="ኮከበ ሃይማኖት"
+              className="w-10 h-10 rounded-2xl object-cover border border-orange-200/70 shadow-sm shrink-0"
+            />
             <div className="flex flex-col">
               <div className="flex items-center gap-1.5">
                 <h1 className="text-[17px] font-bold text-[#241E20] leading-tight">{t.booksTab}</h1>

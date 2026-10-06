@@ -175,16 +175,11 @@ export const EqubPage: React.FC = () => {
         <div className="flex items-center justify-between">
           {/* Title & Emblem */}
           <div className="flex items-center gap-2.5">
-            <div className="w-9 h-9 rounded-xl bg-[#F9EDEF] border border-[#5C0B1C]/10 flex items-center justify-center text-[#7A2330] shadow-[0_1px_2px_rgba(0,0,0,0.04)]">
-              {/* Cyclone / spiral icon */}
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="2" />
-                <path d="M12 2a10 10 0 0 1 10 10" />
-                <path d="M12 6a6 6 0 0 1 6 6" />
-                <path d="M12 18a6 6 0 0 1-6-6" />
-                <path d="M12 22a10 10 0 0 1-10-10" />
-              </svg>
-            </div>
+            <img
+              src="/app-logo.png"
+              alt="ኮከበ ሃይማኖት"
+              className="w-10 h-10 rounded-xl object-cover border border-[#5C0B1C]/10 shadow-sm shrink-0"
+            />
             <div>
               <h1 className="font-bold text-[18px] leading-tight text-[#201A1C]">{t.title}</h1>
               <p className="text-[11px] text-[#63585B] leading-none mt-0.5">{t.subtitle}</p>
