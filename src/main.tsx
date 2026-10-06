@@ -4,10 +4,11 @@ import '@/styles/global.css';
 import '@/shared/i18n/i18n';
 import App from '@/app/App';
 
-// Register mock services when VITE_USE_MOCKS=true
-if (import.meta.env.VITE_USE_MOCKS === 'true') {
-  // Dynamic import keeps mocks out of the production bundle
-  import('@/mocks').then(({ registerMocks }) => registerMocks());
+import { registerMocks } from '@/mocks';
+
+// Register mock services by default unless explicitly disabled (e.g. VITE_USE_MOCKS=false)
+if (import.meta.env.VITE_USE_MOCKS !== 'false') {
+  registerMocks();
 }
 
 const root = document.getElementById('root');

@@ -169,20 +169,20 @@ export const EqubPage: React.FC = () => {
   }
 
   return (
-    <div className="w-full bg-[#FBF8F4] text-[#201A1C] min-h-screen flex flex-col pb-24">
+    <div className="w-full bg-bg-primary text-text-primary min-h-screen flex flex-col pb-24">
       {/* ── Fixed Sticky Header ─────────────────────────────────────── */}
-      <header className="sticky top-0 z-40 bg-[#FBF8F4]/95 backdrop-blur-md border-b border-[#EDE6DB] px-4 pt-3 pb-3">
+      <header className="sticky top-0 z-40 bg-bg-primary/95 backdrop-blur-md border-b border-border-subtle px-4 pt-3 pb-3">
         <div className="flex items-center justify-between">
           {/* Title & Emblem */}
           <div className="flex items-center gap-2.5">
             <img
               src="/app-logo.png"
               alt="ኮከበ ሃይማኖት"
-              className="w-10 h-10 rounded-xl object-cover border border-[#5C0B1C]/10 shadow-sm shrink-0"
+              className="w-10 h-10 rounded-xl object-cover border border-brand-500/10 shadow-sm shrink-0"
             />
             <div>
-              <h1 className="font-bold text-[18px] leading-tight text-[#201A1C]">{t.title}</h1>
-              <p className="text-[11px] text-[#63585B] leading-none mt-0.5">{t.subtitle}</p>
+              <h1 className="font-bold text-[18px] leading-tight text-text-primary">{t.title}</h1>
+              <p className="text-[11px] text-text-secondary leading-none mt-0.5">{t.subtitle}</p>
             </div>
           </div>
 
@@ -191,18 +191,18 @@ export const EqubPage: React.FC = () => {
             {/* Language Switch */}
             <button
               onClick={handleLanguageToggle}
-              className="h-8 px-2.5 rounded-full bg-[#F5EFE6] border border-[#EDE6DB] text-[11px] font-semibold text-[#63585B] hover:text-[#201A1C] transition-colors flex items-center gap-1 active:scale-95"
+              className="h-8 px-2.5 rounded-full bg-bg-card border border-border-subtle text-[11px] font-semibold text-text-secondary hover:text-text-primary transition-colors flex items-center gap-1 active:scale-95"
             >
-              <span className={cn('font-bold', language === 'am' ? 'text-[#7A2330]' : 'text-[#63585B]')}>አማ</span>
-              <span className="text-[#968A8E]">/</span>
-              <span className={cn('font-bold', language === 'en' ? 'text-[#7A2330]' : 'text-[#63585B]')}>EN</span>
+              <span className={cn('font-bold', language === 'am' ? 'text-brand-500' : 'text-text-secondary')}>አማ</span>
+              <span className="text-text-muted">/</span>
+              <span className={cn('font-bold', language === 'en' ? 'text-brand-500' : 'text-text-secondary')}>EN</span>
             </button>
 
             {/* Search */}
             <button
               aria-label="Search"
               onClick={() => setSearchOpen((prev) => !prev)}
-              className="w-9 h-9 rounded-full flex items-center justify-center text-[#63585B] hover:text-[#201A1C] hover:bg-[#F5EFE6] transition-colors active:scale-95"
+              className="w-9 h-9 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-bg-secondary transition-colors active:scale-95"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
@@ -212,12 +212,12 @@ export const EqubPage: React.FC = () => {
             {/* Notifications */}
             <button
               aria-label="Notifications"
-              className="w-9 h-9 rounded-full flex items-center justify-center text-[#63585B] hover:text-[#201A1C] hover:bg-[#F5EFE6] transition-colors relative active:scale-95"
+              className="w-9 h-9 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-bg-secondary transition-colors relative active:scale-95"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
               </svg>
-              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#5C0B1C] ring-2 ring-[#FBF8F4]" />
+              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-brand-500 ring-2 ring-bg-card" />
             </button>
 
             {/* Profile Avatar */}
@@ -235,7 +235,7 @@ export const EqubPage: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={language === 'am' ? 'እቁብ ይፈልጉ...' : 'Search equbs...'}
-              className="w-full px-3.5 py-2 text-[13px] bg-white border border-[#EDE6DB] rounded-xl outline-none focus:border-[#7A2330]"
+              className="w-full px-3.5 py-2 text-[13px] bg-bg-card border border-border-subtle text-text-primary placeholder:text-text-muted rounded-xl outline-none focus:border-brand-500 shadow-sm"
               autoFocus
             />
           </div>
@@ -245,14 +245,14 @@ export const EqubPage: React.FC = () => {
       {/* ── Main Content Area ───────────────────────────────────────── */}
       <main className="flex flex-col relative w-full pt-3 px-4 max-w-lg mx-auto flex-1">
         {/* Segmented Navigation Tabs */}
-        <div className="bg-[#F5EFE6]/90 p-1 rounded-2xl border border-[#EDE6DB] flex items-center gap-1">
+        <div className="bg-bg-secondary p-1 rounded-2xl border border-border-subtle flex items-center gap-1">
           <button
             onClick={() => setActiveTab('my')}
             className={cn(
               'flex-1 h-10 rounded-xl text-[13px] font-semibold flex items-center justify-center gap-1.5 transition-all duration-200',
               activeTab === 'my'
-                ? 'bg-[#7A2330] text-white shadow-sm'
-                : 'text-[#63585B] hover:text-[#201A1C]'
+                ? 'bg-brand-500 text-white shadow-sm'
+                : 'text-text-secondary hover:text-text-primary'
             )}
           >
             {/* Verified icon */}
@@ -262,13 +262,13 @@ export const EqubPage: React.FC = () => {
             <span>{t.tabMy}</span>
           </button>
 
-          <button
+            <button
             onClick={() => setActiveTab('open')}
             className={cn(
               'flex-1 h-10 rounded-xl text-[13px] font-semibold flex items-center justify-center gap-1.5 transition-all duration-200',
               activeTab === 'open'
-                ? 'bg-[#7A2330] text-white shadow-sm'
-                : 'text-[#63585B] hover:text-[#201A1C]'
+                ? 'bg-brand-500 text-white shadow-sm'
+                : 'text-text-secondary hover:text-text-primary'
             )}
           >
             {/* Group add icon */}
@@ -283,27 +283,27 @@ export const EqubPage: React.FC = () => {
         {activeTab === 'my' && (
           <div className="flex flex-col gap-4 mt-4">
             {isLoading ? (
-              <div className="bg-white rounded-2xl p-5 border border-[#EDE6DB] animate-pulse space-y-4">
-                <div className="h-6 w-1/2 bg-[#F5EFE6] rounded" />
-                <div className="h-20 bg-[#F5EFE6] rounded-xl" />
-                <div className="h-16 bg-[#F5EFE6] rounded-xl" />
+              <div className="bg-bg-card rounded-2xl p-5 border border-border-subtle animate-pulse space-y-4">
+                <div className="h-6 w-1/2 bg-bg-secondary rounded" />
+                <div className="h-20 bg-bg-secondary rounded-xl" />
+                <div className="h-16 bg-bg-secondary rounded-xl" />
               </div>
             ) : myEqub ? (
               <>
                 {/* HERO CARD: Active Equb Cycle */}
-                <section className="bg-white rounded-2xl border border-[#EDE6DB] shadow-[0_2px_10px_-2px_rgba(36,30,32,0.05),0_1px_3px_0_rgba(36,30,32,0.04)] overflow-hidden relative">
+                <section className="bg-bg-card rounded-2xl border border-border-subtle shadow-card overflow-hidden relative">
                   <div className="p-5 flex flex-col gap-4">
                     {/* Card Header & Badge */}
                     <div className="flex items-start justify-between gap-3">
                       <div className="flex items-start gap-3 min-w-0">
-                        <div className="w-12 h-12 rounded-xl bg-[#F9EDEF] border border-[#5C0B1C]/10 flex items-center justify-center text-[#7A2330] shrink-0 text-[24px]">
+                        <div className="w-12 h-12 rounded-xl bg-brand-50/20 border border-brand-500/20 flex items-center justify-center text-brand-500 shrink-0 text-[24px]">
                           ⛪
                         </div>
                         <div className="min-w-0">
-                          <h2 className="text-[17px] font-bold text-[#201A1C] leading-tight truncate">
+                          <h2 className="text-[17px] font-bold text-text-primary leading-tight truncate">
                             {myEqub.name[language]}
                           </h2>
-                          <p className="text-[12px] text-[#63585B] mt-0.5 font-medium">
+                          <p className="text-[12px] text-text-secondary mt-0.5 font-medium">
                             {myEqub.groupLabel[language]} · {myEqub.memberCount} {language === 'am' ? 'ንቁ አባላት' : 'active members'}
                           </p>
                         </div>

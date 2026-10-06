@@ -46,10 +46,10 @@ export const CatalogCard: React.FC<CatalogCardProps> = ({ book, onToggleSaved })
   const badgeLabel = book.badgeLabel ? book.badgeLabel[lang] : undefined;
 
   return (
-    <article className="bg-white rounded-2xl p-3 shadow-[0_4px_18px_rgba(0,0,0,0.04)] border border-[#EAE2D8] flex flex-col justify-between group hover:shadow-[0_8px_24px_rgba(92,11,28,0.08)] hover:border-[#7a2330]/25 active:scale-[0.98] cursor-pointer transition-all duration-200">
+    <article className="bg-bg-card rounded-2xl p-3 shadow-card border border-border-subtle flex flex-col justify-between group hover:shadow-[0_8px_24px_rgba(92,11,28,0.15)] hover:border-brand-500/30 active:scale-[0.98] cursor-pointer transition-all duration-200">
       <Link to={ROUTES.CATALOG.DETAIL(book.id)} className="flex flex-col flex-1 min-w-0">
         {/* Cover image */}
-        <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-[#F5EFEB] mb-2.5 shadow-[0_1px_4px_rgba(0,0,0,0.06)]">
+        <div className="relative w-full aspect-[4/3] rounded-xl overflow-hidden bg-bg-secondary mb-2.5 shadow-sm">
           {book.coverUrl ? (
             <img
               alt={book.title[lang]}
@@ -102,13 +102,13 @@ export const CatalogCard: React.FC<CatalogCardProps> = ({ book, onToggleSaved })
         </div>
 
         {/* Title */}
-        <h4 className="font-bold text-[13.5px] text-[#241E20] leading-[1.35] line-clamp-2 group-hover:text-[#7a2330] transition-colors flex-1">
+        <h4 className="font-bold text-[13.5px] text-text-primary leading-[1.35] line-clamp-2 group-hover:text-brand-500 transition-colors flex-1">
           {book.title[lang]}
         </h4>
       </Link>
 
       {/* Price row */}
-      <div className="pt-2.5 mt-2.5 border-t border-[#F2ECE4] flex items-baseline justify-between">
+      <div className="pt-2.5 mt-2.5 border-t border-border-subtle flex items-baseline justify-between">
         <div className="flex items-baseline gap-1.5">
           <span className="text-[14px] font-extrabold text-[#7a2330]">
             {book.price.toLocaleString()} ETB

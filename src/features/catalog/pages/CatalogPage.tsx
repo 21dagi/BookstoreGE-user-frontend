@@ -82,23 +82,23 @@ const CatalogPage: React.FC = () => {
   };
 
   return (
-    <div className="w-full bg-[#F8F7F5] min-h-screen flex flex-col pb-20">
+    <div className="w-full bg-bg-primary text-text-primary min-h-screen flex flex-col pb-20">
 
       {/* ── Sticky Header ─────────────────────────────────────────── */}
-      <header className="sticky top-0 z-40 bg-[#F8F7F5]/90 backdrop-blur-md border-b border-[#EFEAE3]/70 px-5 pt-4 pb-2">
+      <header className="sticky top-0 z-40 bg-bg-primary/95 backdrop-blur-md border-b border-border-subtle px-5 pt-4 pb-2">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <img
               src="/app-logo.png"
               alt="ኮከበ ሃይማኖት"
-              className="w-10 h-10 rounded-2xl object-cover border border-orange-200/70 shadow-sm shrink-0"
+              className="w-10 h-10 rounded-2xl object-cover border border-orange-200/40 shadow-sm shrink-0"
             />
             <div className="flex flex-col">
               <div className="flex items-center gap-1.5">
-                <h1 className="text-[17px] font-bold text-[#241E20] leading-tight">{t.booksTab}</h1>
-                <span className="text-[11px] font-semibold text-[#A39A9D]">· Books</span>
+                <h1 className="text-[17px] font-bold text-text-primary leading-tight">{t.booksTab}</h1>
+                <span className="text-[11px] font-semibold text-text-muted">· Books</span>
               </div>
-              <span className="text-[11px] text-[#7A7073] leading-tight mt-0.5 flex items-center gap-1">
+              <span className="text-[11px] text-text-secondary leading-tight mt-0.5 flex items-center gap-1">
                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
                 {t.storeSubtitle}
               </span>
@@ -109,7 +109,7 @@ const CatalogPage: React.FC = () => {
           <div className="flex items-center gap-2">
             <button
               onClick={handleLanguageToggle}
-              className="px-2 py-1 rounded-full text-[11px] font-bold border border-[#ECE7E1] bg-white text-[#7a2330] shadow-sm active:scale-95 transition-transform"
+              className="px-2 py-1 rounded-full text-[11px] font-bold border border-border-subtle bg-bg-card text-brand-500 shadow-sm active:scale-95 transition-transform"
               aria-label="Toggle language"
             >
               {language === 'am' ? 'EN' : 'አማ'}
@@ -118,7 +118,7 @@ const CatalogPage: React.FC = () => {
               aria-label="Search"
               id="catalog-search-btn"
               onClick={() => setSearchOpen((v) => !v)}
-              className="w-9 h-9 rounded-full bg-white shadow-sm border border-[#ECE7E1] flex items-center justify-center text-[#241E20] active:scale-95 transition-transform"
+              className="w-9 h-9 rounded-full bg-bg-card shadow-sm border border-border-subtle flex items-center justify-center text-text-primary active:scale-95 transition-transform"
             >
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
@@ -127,18 +127,18 @@ const CatalogPage: React.FC = () => {
             <Link
               to={ROUTES.CART.ROOT}
               aria-label="Cart"
-              className="relative w-9 h-9 rounded-full bg-white shadow-sm border border-[#ECE7E1] flex items-center justify-center text-[#241E20] active:scale-95 transition-transform"
+              className="relative w-9 h-9 rounded-full bg-bg-card shadow-sm border border-border-subtle flex items-center justify-center text-text-primary active:scale-95 transition-transform"
             >
               <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 0 1-8 0" />
               </svg>
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#7a2330] text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm border-2 border-white">
+              <span className="absolute -top-1 -right-1 w-4 h-4 bg-brand-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm border-2 border-bg-card">
                 2
               </span>
             </Link>
             <div className="relative pl-0.5">
               <Avatar name={displayName} src={user?.photo_url} size="sm" />
-              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-white" />
+              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-bg-card" />
             </div>
           </div>
         </div>
@@ -147,7 +147,7 @@ const CatalogPage: React.FC = () => {
         {searchOpen && (
           <div className="mt-2.5 pb-1">
             <div className="relative w-full">
-              <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A39A9D]" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+              <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
               </svg>
               <input
@@ -156,7 +156,7 @@ const CatalogPage: React.FC = () => {
                 placeholder={t.searchPlaceholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-10 pl-10 pr-9 rounded-xl bg-white border border-[#EBE5DE] text-[#241E20] placeholder:text-[#A39A9D] text-[13px] font-medium focus:outline-none focus:border-[#7a2330]/50 shadow-sm transition-all"
+                className="w-full h-10 pl-10 pr-9 rounded-xl bg-bg-card border border-border-subtle text-text-primary placeholder:text-text-muted text-[13px] font-medium focus:outline-none focus:border-brand-500/50 shadow-sm transition-all"
               />
             </div>
           </div>
@@ -167,15 +167,15 @@ const CatalogPage: React.FC = () => {
 
         {/* ── Segment Tabs: Books / Sacred Items ─────────────────── */}
         <section className="px-5 pt-3 pb-1">
-          <div className="p-1 rounded-2xl bg-[#EFEAE2] flex items-center gap-1 shadow-inner border border-[#E6DFD6]">
+          <div className="p-1 rounded-2xl bg-bg-secondary flex items-center gap-1 shadow-inner border border-border-subtle">
             <button
               id="segment-books"
               onClick={() => setActiveSegment('books')}
               className={cn(
                 'flex-1 py-2 px-3 rounded-xl text-[13px] flex items-center justify-center gap-1.5 transition-all',
                 activeSegment === 'books'
-                  ? 'bg-[#7A2330] text-white font-bold shadow-[0_2px_8px_rgba(122,35,48,0.28)]'
-                  : 'bg-[#FAF6F2] hover:bg-white text-[#2A2326] font-medium border border-[#EAE2D8]/80 active:scale-[0.98]',
+                  ? 'bg-brand-500 text-white font-bold shadow-[0_2px_8px_rgba(122,35,48,0.28)]'
+                  : 'bg-bg-card hover:bg-bg-card/80 text-text-secondary hover:text-text-primary font-medium border border-border-subtle/80 active:scale-[0.98]',
               )}
             >
               <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">

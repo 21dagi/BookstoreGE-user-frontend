@@ -5,6 +5,8 @@ import { Icon, IconName } from '@/shared/ui/Icon';
 import { ROUTES } from '@/shared/constants';
 import { useLanguage } from '@/shared/i18n';
 
+import { useThemeStore } from '@/shared/theme';
+
 export interface NavItemConfig {
   path: string;
   icon: IconName;
@@ -20,15 +22,16 @@ export const NAV_ITEMS: NavItemConfig[] = [
 ];
 
 export const BottomNav: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
+  const { resolvedTheme, toggleTheme } = useThemeStore();
 
   return (
     <nav
       role="navigation"
       aria-label="Main Navigation"
-      className="fixed bottom-0 left-0 right-0 z-40 bg-bg-card/95 backdrop-blur-md border-t border-border-subtle shadow-bottom pb-safe select-none"
+      className="fixed bottom-0 left-0 right-0 max-w-[440px] mx-auto z-40 bg-bg-card/95 backdrop-blur-md border-t border-border-subtle shadow-bottom pb-safe select-none"
     >
-      <div className="max-w-lg mx-auto flex items-center justify-around h-16 px-2">
+      <div className="flex items-center justify-around h-16 px-1">
         {NAV_ITEMS.map((item) => (
           <NavLink
             key={item.path}
@@ -47,19 +50,36 @@ export const BottomNav: React.FC = () => {
               <>
                 <Icon
                   name={item.icon}
-                  size={20}
+                  size={19}
                   className={cn(
                     'transition-transform',
                     isActive && 'scale-110 text-brand-500',
                   )}
                 />
-                <span className="text-[11px] mt-1 tracking-tight">
+                <span className="text-[10px] mt-1 tracking-tight">
                   {t(item.labelKey)}
                 </span>
               </>
             )}
           </NavLink>
         ))}
+
+        {/* Dark / Light Mode Toggle Button */}
+        <button
+          type="button"
+          onClick={toggleTheme}
+          aria-label={`Switch to ${resolvedTheme === 'dark' ? 'light' : 'dark'} mode`}
+          className="flex flex-col items-center justify-center flex-1 py-1 min-h-[44px] text-text-muted hover:text-text-primary active:scale-95 transition-transform"
+        >
+          {resolvedTheme === 'dark' ? (
+            <Icon name="Sun" size={19} className="text-amber-400" />
+          ) : (
+            <Icon name="Moon" size={19} className="text-brand-500" />
+          )}
+          <span className="text-[10px] mt-1 tracking-tight">
+            {resolvedTheme === 'dark' ? (language === 'am' ? 'ብርሃን' : 'Light') : (language === 'am' ? 'ጨለማ' : 'Dark')}
+          </span>
+        </button>
       </div>
     </nav>
   );

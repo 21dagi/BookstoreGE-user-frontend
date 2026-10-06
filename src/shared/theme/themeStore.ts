@@ -38,7 +38,7 @@ function applyThemeToDocument(theme: 'light' | 'dark') {
 }
 
 const initialMode: ThemeMode =
-  (safeStorage.getItem(STORAGE_KEYS.THEME) as ThemeMode) || 'auto';
+  (safeStorage.getItem(STORAGE_KEYS.THEME) as ThemeMode) || 'dark';
 const initialResolved = resolveMode(initialMode);
 applyThemeToDocument(initialResolved);
 

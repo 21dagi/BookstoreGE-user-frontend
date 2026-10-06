@@ -167,23 +167,23 @@ const WalletPage: React.FC = () => {
   ];
 
   return (
-    <div className="w-full bg-[#F8F7F5] min-h-screen flex flex-col pb-20">
+    <div className="w-full bg-bg-primary text-text-primary min-h-screen flex flex-col pb-20">
 
       {/* ── Sticky Header ─────────────────────────────────────────── */}
-      <header className="sticky top-0 z-40 bg-[#F8F7F5]/90 backdrop-blur-md px-5 pt-4 pb-2">
+      <header className="sticky top-0 z-40 bg-bg-primary/95 backdrop-blur-md px-5 pt-4 pb-2 border-b border-border-subtle">
         <div className="flex items-center justify-between">
           {/* Avatar + Title */}
           <div className="flex items-center gap-3">
             <div className="relative">
               <Avatar name={displayName} src={user?.photo_url} size="md" />
-              <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-white" />
+              <span className="absolute bottom-0 right-0 w-3 h-3 bg-emerald-500 rounded-full border-2 border-bg-card" />
             </div>
             <div className="flex flex-col">
               <div className="flex items-center gap-1.5">
-                <span className="text-[17px] font-bold text-[#241E20] leading-tight">{t.walletTitle}</span>
-                <span className="text-[12px] font-medium text-[#A39A9D]">· Wallet</span>
+                <span className="text-[17px] font-bold text-text-primary leading-tight">{t.walletTitle}</span>
+                <span className="text-[12px] font-medium text-text-muted">· Wallet</span>
               </div>
-              <span className="text-[11.5px] text-[#7A7073] leading-tight mt-0.5 truncate max-w-[170px]">
+              <span className="text-[11.5px] text-text-secondary leading-tight mt-0.5 truncate max-w-[170px]">
                 {t.storeName}
               </span>
             </div>
@@ -194,7 +194,7 @@ const WalletPage: React.FC = () => {
             <Link
               to={ROUTES.CATALOG.SEARCH}
               aria-label="Search"
-              className="w-9 h-9 rounded-full bg-white shadow-sm flex items-center justify-center text-[#7A7073] hover:text-[#241E20] active:scale-95 transition-all"
+              className="w-9 h-9 rounded-full bg-bg-card shadow-sm border border-border-subtle flex items-center justify-center text-text-secondary hover:text-text-primary active:scale-95 transition-all"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                 <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
@@ -202,7 +202,7 @@ const WalletPage: React.FC = () => {
             </Link>
             <button
               onClick={() => changeLanguage(language === 'am' ? 'en' : 'am')}
-              className="h-8 px-2.5 rounded-full bg-white/90 border border-[#ECE7E1] text-[11px] font-semibold text-[#241E20] flex items-center gap-1 shadow-sm hover:border-[#D4902A] active:scale-95 transition-all"
+              className="h-8 px-2.5 rounded-full bg-bg-card border border-border-subtle text-[11px] font-semibold text-text-primary flex items-center gap-1 shadow-sm hover:border-brand-500 active:scale-95 transition-all"
             >
               <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="text-[#B2782A]">
                 <circle cx="12" cy="12" r="10" /><line x1="2" y1="12" x2="22" y2="12" />
