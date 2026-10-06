@@ -1,0 +1,19 @@
+/* Ethiopic & Heading font styling */
+:lang(am) {
+  font-family: var(--font-ethiopic);
+  line-height: 1.65;
+}
+
+h1,
+h2,
+h3,
+.font-heading {
+  font-family: var(--font-heading);
+}
+
+:lang(am) h1,
+:lang(am) h2,
+:lang(am) h3,
+:lang(am) .font-heading {
+  font-family: var(--font-ethiopic);
+}

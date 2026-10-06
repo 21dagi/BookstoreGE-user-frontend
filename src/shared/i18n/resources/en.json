@@ -1,0 +1,130 @@
+{
+  "common": {
+    "appName": "Gedame Eyesus",
+    "bookstore": "Bookstore",
+    "equb": "Book Equb",
+    "back": "Back",
+    "close": "Close",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "save": "Save",
+    "done": "Done",
+    "next": "Next",
+    "submit": "Submit",
+    "search": "Search...",
+    "retry": "Retry",
+    "viewAll": "View All",
+    "seeMore": "See More",
+    "loading": "Loading...",
+    "empty": "No data found",
+    "errorTitle": "An error occurred",
+    "errorMessage": "Please try again in a few moments.",
+    "offlineTitle": "No Internet Connection",
+    "offlineMessage": "Please check your network settings.",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "currency": "ETB",
+    "pickupOnly": "In-person pickup only"
+  },
+  "nav": {
+    "home": "Home",
+    "books": "Books",
+    "equb": "Equb",
+    "wallet": "Wallet",
+    "profile": "Profile",
+    "cart": "Cart"
+  },
+  "catalog": {
+    "title": "Book Catalog",
+    "featured": "Featured Books",
+    "categories": "Categories",
+    "allBooks": "All Books",
+    "searchPlaceholder": "Search by title or author...",
+    "addToCart": "Add to Cart",
+    "inStock": "In Stock",
+    "fewLeft": "Few Left",
+    "outOfStock": "Out of Stock",
+    "author": "Author",
+    "pages": "Pages",
+    "publisher": "Publisher",
+    "isbn": "ISBN",
+    "bookDetail": "Book Details",
+    "savedBooks": "Saved Books"
+  },
+  "cart": {
+    "title": "Shopping Cart",
+    "empty": "Your cart is empty",
+    "emptyPrompt": "Explore books and add them to your cart",
+    "subtotal": "Subtotal",
+    "total": "Total Amount",
+    "checkout": "Proceed to Checkout",
+    "pickupNote": "Note: Purchased books must be picked up in-person at the church bookstore."
+  },
+  "orders": {
+    "title": "My Orders",
+    "orderNumber": "Order #",
+    "orderDate": "Order Date",
+    "pickupStatus": "Pickup Status",
+    "statuses": {
+      "pending_payment": "Pending Payment",
+      "awaiting_verification": "Awaiting Verification",
+      "confirmed": "Confirmed",
+      "preparing": "Preparing",
+      "ready_for_pickup": "Ready for Pickup",
+      "collected": "Collected",
+      "cancelled": "Cancelled",
+      "refunded": "Refunded"
+    }
+  },
+  "wallet": {
+    "title": "My Wallet",
+    "totalBalance": "Total Balance",
+    "generalBalance": "General Balance",
+    "equbCredit": "Equb Credit",
+    "equbCreditNotice": "Equb Credit can only be used to purchase books.",
+    "deposit": "Add Money",
+    "recentTransactions": "Recent Transactions",
+    "noWithdrawalNotice": "Withdrawals are not supported. Balance can only be used for book purchases and Equb contributions."
+  },
+  "payments": {
+    "title": "Payment",
+    "selectMethod": "Select Payment Method",
+    "telebirr": "telebirr",
+    "cbe": "Commercial Bank of Ethiopia (CBE)",
+    "boa": "Bank of Abyssinia (BOA)",
+    "accountNumber": "Account Number",
+    "accountName": "Account Name",
+    "amount": "Payment Amount",
+    "reference": "Transaction Reference / TxID",
+    "uploadReceipt": "Upload Receipt Screenshot",
+    "submitPayment": "Submit Payment"
+  },
+  "equb": {
+    "title": "Book Equb",
+    "activeGroups": "My Active Groups",
+    "openGroups": "Open Groups",
+    "joinGroup": "Join Group",
+    "round": "Round",
+    "contribution": "Contribution Amount",
+    "nextDueDate": "Next Due Date",
+    "statuses": {
+      "upcoming": "Upcoming",
+      "due": "Due",
+      "submitted": "Submitted (Awaiting Verification)",
+      "confirmed": "Confirmed",
+      "overdue": "Overdue",
+      "prepaid": "Prepaid",
+      "covered_by_plan": "Covered by Plan",
+      "adjusted": "Adjusted"
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "settings": "Settings",
+    "language": "Language / ቋንቋ",
+    "theme": "Theme",
+    "help": "Help & Info",
+    "policies": "Policies & Terms",
+    "about": "About App"
+  }
+}

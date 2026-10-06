@@ -1,0 +1,130 @@
+{
+  "common": {
+    "appName": "ገድአመ ኢየሱስ",
+    "bookstore": "መጽሐፍት መደብር",
+    "equb": "መጽሐፍ እቁብ",
+    "back": "ተመለስ",
+    "close": "ዝጋ",
+    "cancel": "ተወው",
+    "confirm": "አረጋግጥ",
+    "save": "አስቀምጥ",
+    "done": "ተከናውኗል",
+    "next": "ቀጣይ",
+    "submit": "አስገባ",
+    "search": "ፈልግ...",
+    "retry": "እንደገና ሞክር",
+    "viewAll": "ሁሉንም እይ",
+    "seeMore": "ተጨማሪ እይ",
+    "loading": "በመጫን ላይ...",
+    "empty": "ምንም መረጃ አልተገኘም",
+    "errorTitle": "ስህተት ተፈጥሯል",
+    "errorMessage": "እባክዎ ትንሽ ቆይተው እንደገና ይሞክሩ።",
+    "offlineTitle": "የበይነመረብ ግንኙነት የለም",
+    "offlineMessage": "እባክዎ የበይነመረብ ግንኙነትዎን ያረጋግጡ።",
+    "copy": "ቅዳ",
+    "copied": "ተቀድቷል!",
+    "currency": "ብር",
+    "pickupOnly": "በአካል ቀርበው የሚወስዱት ብቻ"
+  },
+  "nav": {
+    "home": "ዋና ገጽ",
+    "books": "መጻሕፍት",
+    "equb": "እቁብ",
+    "wallet": "የኪስ ቦርሳ",
+    "profile": "መገለጫ",
+    "cart": "ጋሪ"
+  },
+  "catalog": {
+    "title": "የመጻሕፍት ዝርዝር",
+    "featured": "ተለይተው የቀረቡ መጻሕፍት",
+    "categories": "የመጻሕፍት ዘርፎች",
+    "allBooks": "ሁሉም መጻሕፍት",
+    "searchPlaceholder": "መጽሐፍ ወይም ደራሲ ፈልግ...",
+    "addToCart": "ወደ ጋሪ ጨምር",
+    "inStock": "በክምችት ላይ ያለ",
+    "fewLeft": "ጥቂት የቀሩ",
+    "outOfStock": "ያለቀ",
+    "author": "ደራሲ",
+    "pages": "ገጾች",
+    "publisher": "አሳታሚ",
+    "isbn": "ISBN",
+    "bookDetail": "የመጽሐፍ ዝርዝር",
+    "savedBooks": "የተቀመጡ መጻሕፍት"
+  },
+  "cart": {
+    "title": "የግዢ ጋሪ",
+    "empty": "ጋሪዎ ባዶ ነው",
+    "emptyPrompt": "መጻሕፍትን በመምረጥ ወደ ጋሪዎ ያክሉ",
+    "subtotal": "የመጻሕፍት ዋጋ",
+    "total": "አጠቃላይ ክፍያ",
+    "checkout": "ወደ ክፍያ ሂድ",
+    "pickupNote": "ማስታወሻ፡ መጻሕፍትን በቤተክርስቲያኑ መደብር በአካል መጥተው መውሰድ ይኖርብዎታል።"
+  },
+  "orders": {
+    "title": "ትዕዛዞቼ",
+    "orderNumber": "የትዕዛዝ ቁጥር",
+    "orderDate": "የትዕዛዝ ቀን",
+    "pickupStatus": "የመውሰጃ ሁኔታ",
+    "statuses": {
+      "pending_payment": "ክፍያ በመጠበቅ ላይ",
+      "awaiting_verification": "ማረጋገጫ በመጠበቅ ላይ",
+      "confirmed": "የተረጋገጠ",
+      "preparing": "በመዘጋጀት ላይ",
+      "ready_for_pickup": "ለመውሰድ ዝግጁ",
+      "collected": "ተወስዷል",
+      "cancelled": "የተሰረዘ",
+      "refunded": "የተመለሰ"
+    }
+  },
+  "wallet": {
+    "title": "የኪስ ቦርሳ",
+    "totalBalance": "አጠቃላይ ቀሪ ሒሳብ",
+    "generalBalance": "መደበኛ ሒሳብ",
+    "equbCredit": "የእቁብ ክሬዲት",
+    "equbCreditNotice": "የእቁብ ክሬዲት መጻሕፍትን ለመግዛት ብቻ የሚያገለግል ነው።",
+    "deposit": "ገንዘብ አስገባ",
+    "recentTransactions": "የቅርብ ጊዜ እንቅስቃሴዎች",
+    "noWithdrawalNotice": "ገንዘብ ማውጣት አይቻልም፤ ለመጻሕፍት ግዢ እና ለእቁብ መዋጮ ብቻ ይውላል።"
+  },
+  "payments": {
+    "title": "ክፍያ",
+    "selectMethod": "የክፍያ ዘዴ ይምረጡ",
+    "telebirr": "ቴሌብር",
+    "cbe": "የኢትዮጵያ ንግድ ባንክ (CBE)",
+    "boa": "አቢሲኒያ ባንክ (BOA)",
+    "accountNumber": "የሒሳብ ቁጥር",
+    "accountName": "የሒሳብ ባለቤት",
+    "amount": "የክፍያ መጠን",
+    "reference": "የትራንዛክሽን ቁጥር (Reference)",
+    "uploadReceipt": "የደረሰኝ ፎቶ ያያይዙ",
+    "submitPayment": "ክፍያውን አረጋግጥ"
+  },
+  "equb": {
+    "title": "መጽሐፍ እቁብ",
+    "activeGroups": "ተሳትፎ ያለኝ እቁቦች",
+    "openGroups": "ክፍት የእቁብ ቡድኖች",
+    "joinGroup": "እቁብ ተቀላቀል",
+    "round": "ዙር",
+    "contribution": "የመዋጮ መጠን",
+    "nextDueDate": "ቀጣይ መዋጮ ቀን",
+    "statuses": {
+      "upcoming": "የሚመጣ",
+      "due": "የደረሰ",
+      "submitted": "የገባ (ማረጋገጫ በመጠበቅ ላይ)",
+      "confirmed": "የተረጋገጠ",
+      "overdue": "ያለፈበት",
+      "prepaid": "በቅድሚያ የተከፈለ",
+      "covered_by_plan": "በእቅድ የተሸፈነ",
+      "adjusted": "የተስተካከለ"
+    }
+  },
+  "profile": {
+    "title": "መገለጫ",
+    "settings": "ማስተካከያዎች",
+    "language": "ቋንቋ / Language",
+    "theme": "ገጽታ",
+    "help": "እርዳታና መረጃ",
+    "policies": "ደንቦችና መመሪያዎች",
+    "about": "ስለ መተግበሪያው"
+  }
+}

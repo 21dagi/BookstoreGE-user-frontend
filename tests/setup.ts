@@ -1,0 +1,85 @@
+import '@testing-library/jest-dom';
+
+// Polyfill window.matchMedia
+Object.defineProperty(window, 'matchMedia', {
+  writable: true,
+  value: (query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: () => {},
+    removeListener: () => {},
+    addEventListener: () => {},
+    removeEventListener: () => {},
+    dispatchEvent: () => false,
+  }),
+});
+
+// Polyfill Telegram WebApp for test suite
+window.Telegram = {
+  WebApp: {
+    initData: 'query_id=test_query_id&user=%7B%22id%22%3A123456%2C%22first_name%22%3A%22Test%22%2C%22language_code%22%3A%22am%22%7D',
+    initDataUnsafe: {
+      query_id: 'test_query_id',
+      user: {
+        id: 123456,
+        first_name: 'Test',
+        last_name: 'User',
+        username: 'testuser',
+        language_code: 'am',
+      },
+    },
+    version: '7.0',
+    platform: 'tdesktop',
+    colorScheme: 'light',
+    themeParams: {},
+    isExpanded: true,
+    viewportHeight: 800,
+    viewportStableHeight: 800,
+    isClosingConfirmationEnabled: false,
+    headerColor: '#80182a',
+    backgroundColor: '#fcfbf9',
+    BackButton: {
+      isVisible: false,
+      show: () => {},
+      hide: () => {},
+      onClick: () => {},
+      offClick: () => {},
+    },
+    MainButton: {
+      text: '',
+      color: '',
+      textColor: '',
+      isVisible: false,
+      isActive: true,
+      isProgressVisible: false,
+      setText: () => {},
+      onClick: () => {},
+      offClick: () => {},
+      show: () => {},
+      hide: () => {},
+      enable: () => {},
+      disable: () => {},
+      showProgress: () => {},
+      hideProgress: () => {},
+      setParams: () => {},
+    },
+    HapticFeedback: {
+      impactOccurred: () => {},
+      notificationOccurred: () => {},
+      selectionChanged: () => {},
+    },
+    ready: () => {},
+    expand: () => {},
+    close: () => {},
+    openLink: () => {},
+    openTelegramLink: () => {},
+    setHeaderColor: () => {},
+    setBackgroundColor: () => {},
+    enableClosingConfirmation: () => {},
+    disableClosingConfirmation: () => {},
+    onEvent: () => {},
+    offEvent: () => {},
+    sendData: () => {},
+  } as unknown as NonNullable<typeof window.Telegram>['WebApp'],
+};

@@ -1,0 +1,135 @@
+:root {
+  /* Brand Primary: Ecclesiastical Burgundy / Wine Ink */
+  --color-brand-50: #fdf2f4;
+  --color-brand-100: #f7edee;
+  --color-brand-200: #f4abb9;
+  --color-brand-300: #ec758d;
+  --color-brand-400: #9e3e4a;
+  --color-brand-500: #7a2330;
+  --color-brand-600: #5c0b1c;
+  --color-brand-700: #40000e;
+  --color-brand-800: #350810;
+  --color-brand-900: #200409;
+  --color-brand-950: #140205;
+
+  /* Accent: Antique Ecclesiastical Brass / Ochre */
+  --color-accent-50: #fbf8ef;
+  --color-accent-100: #f6efd7;
+  --color-accent-200: #ecdda9;
+  --color-accent-300: #fdc974;
+  --color-accent-400: #d4af37;
+  --color-accent-500: #9e7428;
+  --color-accent-600: #7d5709;
+  --color-accent-700: #604100;
+  --color-accent-800: #422d00;
+  --color-accent-900: #281900;
+
+  /* Light Theme Canvas & Surfaces (Warm Parchment) */
+  --color-bg-primary: #fbf9f5;
+  --color-bg-secondary: #f7ebed;
+  --color-bg-tertiary: #f1e5e8;
+  --color-bg-card: #ffffff;
+  --color-bg-elevated: #ffffff;
+  --color-bg-overlay: rgba(32, 26, 28, 0.65);
+
+  /* Light Theme Typography */
+  --color-text-primary: #241e20;
+  --color-text-secondary: #665c5f;
+  --color-text-muted: #948b8e;
+  --color-text-inverse: #ffffff;
+  --color-text-brand: #7a2330;
+
+  /* Light Theme Borders */
+  --color-border-subtle: #ede7df;
+  --color-border-primary: #dbc0c1;
+  --color-border-strong: #887272;
+
+  /* Semantic Status Colors - Light */
+  --color-status-success-bg: #ecfdf3;
+  --color-status-success-text: #2e7d5b;
+  --color-status-success-border: #a4f3ca;
+
+  --color-status-warning-bg: #fffbf0;
+  --color-status-warning-text: #b7791f;
+  --color-status-warning-border: #fdc974;
+
+  --color-status-danger-bg: #ffdad6;
+  --color-status-danger-text: #b3261e;
+  --color-status-danger-border: #ff8f98;
+
+  --color-status-info-bg: #edf3f8;
+  --color-status-info-text: #3d5a80;
+  --color-status-info-border: #b8d0eb;
+
+  --color-status-neutral-bg: #f7ebed;
+  --color-status-neutral-text: #665c5f;
+  --color-status-neutral-border: #ede7df;
+
+  /* Radii */
+  --radius-xs: 0.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --radius-2xl: 1.5rem;
+  --radius-full: 9999px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 2px 0 rgba(36, 30, 32, 0.04);
+  --shadow-md: 0 4px 12px -2px rgba(36, 30, 32, 0.06), 0 2px 4px -2px rgba(36, 30, 32, 0.04);
+  --shadow-lg: 0 12px 20px -4px rgba(36, 30, 32, 0.08);
+  --shadow-card: 0 2px 8px 0 rgba(36, 30, 32, 0.04);
+  --shadow-bottom-nav: 0 -4px 16px 0 rgba(36, 30, 32, 0.06);
+
+  /* Typography */
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-ethiopic: 'Noto Sans Ethiopic', 'Plus Jakarta Sans', sans-serif;
+  --font-heading: 'Plus Jakarta Sans', 'Noto Sans Ethiopic', sans-serif;
+}
+
+/* Dark Theme Overrides */
+[data-theme='dark'] {
+  --color-brand-500: #9a3545;
+  --color-brand-600: #7a2330;
+
+  --color-bg-primary: #171314;
+  --color-bg-secondary: #221b1d;
+  --color-bg-tertiary: #2e2427;
+  --color-bg-card: #1f181a;
+  --color-bg-elevated: #282023;
+  --color-bg-overlay: rgba(0, 0, 0, 0.8);
+
+  --color-text-primary: #faeef0;
+  --color-text-secondary: #c9bcbf;
+  --color-text-muted: #8c8083;
+  --color-text-inverse: #171314;
+  --color-text-brand: #ff8f98;
+
+  --color-border-subtle: #2e2528;
+  --color-border-primary: #45383c;
+  --color-border-strong: #69565b;
+
+  /* Semantic Status Colors - Dark */
+  --color-status-success-bg: #002113;
+  --color-status-success-text: #88d6af;
+  --color-status-success-border: #004d33;
+
+  --color-status-warning-bg: #281900;
+  --color-status-warning-text: #f1be6b;
+  --color-status-warning-border: #604100;
+
+  --color-status-danger-bg: #40000e;
+  --color-status-danger-text: #ffb2b7;
+  --color-status-danger-border: #93000a;
+
+  --color-status-info-bg: #0d2138;
+  --color-status-info-text: #8fb8e8;
+  --color-status-info-border: #1d3e65;
+
+  --color-status-neutral-bg: #221b1d;
+  --color-status-neutral-text: #c9bcbf;
+  --color-status-neutral-border: #382c2f;
+
+  --shadow-card: 0 2px 10px 0 rgba(0, 0, 0, 0.5);
+  --shadow-bottom-nav: 0 -4px 20px 0 rgba(0, 0, 0, 0.7);
+}
