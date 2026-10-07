@@ -63,12 +63,13 @@ const HomePage: React.FC = () => {
         </div>
         <div className="flex gap-3 overflow-x-auto px-4 no-scrollbar pb-1">
           {isLoading ? (
-            <BookCardSkeleton count={3} />
+            <BookCardSkeleton count={3} className="w-[140px] shrink-0" />
           ) : (
             trendingBooks.map((book) => (
               <BookCard
                 key={book.id}
                 book={book}
+                className="w-[140px] shrink-0"
                 onToggleSaved={handleToggleSaved}
               />
             ))

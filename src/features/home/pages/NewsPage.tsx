@@ -263,37 +263,49 @@ const NewsPage: React.FC = () => {
     <div className="w-full bg-bg-primary text-text-primary min-h-screen flex flex-col pb-24">
 
       {/* Header */}
-      <header className="sticky top-0 z-40 bg-bg-primary/95 backdrop-blur-md border-b border-border-subtle px-4 pt-3 pb-2">
+      <header className="sticky top-0 z-40 bg-bg-primary/95 backdrop-blur-md border-b border-border-subtle shadow-[0_2px_12px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.4)] px-4 py-2.5">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg bg-[#7a2330] flex items-center justify-center shrink-0">
-              <Icon name="Newspaper" size={14} className="text-white" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#681926] to-[#9B2236] flex items-center justify-center shrink-0 shadow-sm border border-border-subtle">
+              <Icon name="Newspaper" size={18} className="text-white" />
             </div>
-            <span className="text-[15px] font-bold text-text-primary">{pageTitle}</span>
+            <div className="flex flex-col">
+              <span className="text-[16px] font-extrabold text-text-primary leading-tight">{pageTitle}</span>
+              <span className="text-[10.5px] font-medium text-text-muted leading-none mt-0.5">
+                {language === 'am' ? 'የኰኵሐ ሃይማኖት ሰንበት ት/ቤት' : 'Kokoha Haymanot'}
+              </span>
+            </div>
           </div>
 
-          <div className="flex items-center gap-1.5">
+          <div className="flex items-center gap-2">
             <button
               onClick={() => changeLanguage(language === 'am' ? 'en' : 'am')}
-              className="h-7 w-7 rounded-full bg-bg-card border border-border-subtle flex items-center justify-center active:scale-95 transition-all"
+              className="h-9 px-2.5 rounded-full bg-bg-card border border-border-subtle shadow-sm hover:border-brand-500/50 flex items-center gap-1.5 active:scale-95 transition-all text-text-primary"
+              aria-label="Switch language"
             >
-              <span className="text-[10px] font-extrabold text-brand-500">{language === 'am' ? 'EN' : 'አማ'}</span>
+              <Icon name="Globe" size={15} className="text-brand-500 shrink-0" />
+              <span className="text-[11.5px] font-bold tracking-tight">{language === 'am' ? 'አማ' : 'EN'}</span>
             </button>
+
             <button
               onClick={toggleTheme}
-              className="h-7 w-7 rounded-full bg-bg-card border border-border-subtle flex items-center justify-center active:scale-95 transition-all"
+              className="h-9 w-9 rounded-full bg-bg-card border border-border-subtle shadow-sm flex items-center justify-center text-text-primary active:scale-95 transition-all"
+              aria-label="Toggle theme"
             >
-              {resolvedTheme === 'dark'
-                ? <Icon name="Sun" size={13} className="text-amber-400" />
-                : <Icon name="Moon" size={13} className="text-brand-500" />
-              }
+              {resolvedTheme === 'dark' ? (
+                <Icon name="Sun" size={17} className="text-amber-400" />
+              ) : (
+                <Icon name="Moon" size={17} className="text-brand-500" />
+              )}
             </button>
+
             <button
               onClick={() => setNotifOpen(true)}
-              className="relative h-7 w-7 rounded-full bg-bg-card border border-border-subtle flex items-center justify-center active:scale-95 transition-all"
+              className="relative h-9 w-9 rounded-full bg-bg-card border border-border-subtle shadow-sm flex items-center justify-center text-text-primary active:scale-95 transition-all"
+              aria-label="Notifications"
             >
-              <Icon name="Bell" size={14} />
-              <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#E5484D]" />
+              <Icon name="Bell" size={18} />
+              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#E5484D]" />
             </button>
           </div>
         </div>

@@ -10,13 +10,14 @@ import { cn } from '@/shared/lib';
 interface BookCardProps {
   book: Book;
   onToggleSaved?: (id: string) => void;
+  className?: string;
 }
 
-export const BookCard: React.FC<BookCardProps> = ({ book, onToggleSaved }) => {
+export const BookCard: React.FC<BookCardProps> = ({ book, onToggleSaved, className }) => {
   const { language } = useLanguage();
 
   return (
-    <article className="shrink-0 w-[140px] flex flex-col group">
+    <article className={cn('flex flex-col group', className)}>
       <Link
         to={ROUTES.CATALOG.DETAIL(book.id)}
         className="relative w-full aspect-square rounded-2xl overflow-hidden bg-bg-card shadow-[0_4px_16px_rgba(0,0,0,0.06)] border border-border-subtle mb-2.5 block"
@@ -84,12 +85,13 @@ export const BookCard: React.FC<BookCardProps> = ({ book, onToggleSaved }) => {
 
 interface BookCardSkeletonProps {
   count?: number;
+  className?: string;
 }
 
-export const BookCardSkeleton: React.FC<BookCardSkeletonProps> = ({ count = 3 }) => (
+export const BookCardSkeleton: React.FC<BookCardSkeletonProps> = ({ count = 3, className }) => (
   <>
     {Array.from({ length: count }).map((_, i) => (
-      <div key={i} className="shrink-0 w-[140px] flex flex-col gap-2">
+      <div key={i} className={cn('flex flex-col gap-2', className ?? 'shrink-0 w-[140px]')}>
         <Skeleton className="w-full aspect-square rounded-2xl" />
         <Skeleton width={100} height={14} className="rounded" />
         <Skeleton width={70} height={12} className="rounded" />

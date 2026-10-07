@@ -31,7 +31,7 @@ export const WalletBanner: React.FC<WalletBannerProps> = ({
   }).format(balance ?? 0);
 
   const currencyLabel = language === 'am' ? 'ብር' : 'ETB';
-  const balanceLabel = language === 'am' ? 'የመደብር ቀሪ ሒሳብ' : 'Store Balance';
+  const balanceLabel = language === 'am' ? 'የእርስዎ ቀሪ ሒሳብ' : 'Your Balance';
   const depositLabel = language === 'am' ? 'አስገባ' : 'Add';
 
   return (

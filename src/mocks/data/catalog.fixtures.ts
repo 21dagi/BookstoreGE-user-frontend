@@ -22,6 +22,13 @@ export const MOCK_FEATURED_BOOKS: FeaturedBook[] = [
     isFeatured: true,
     discountPercent: 12,
     featuredLabel: { am: 'የወሩ ምርጥ ምርጫ', en: "Month's Pick" },
+    pageCount: 840,
+    isbn: '978-99944-0-128-4',
+    itemType: 'book',
+    description: {
+      am: 'መጽሐፈ ስንክሳር የኢትዮጵያ ኦርቶዶክስ ተዋሕዶ ቤተክርስቲያን የቅዱሳን አበው፣ የሰማዕታትና የጻድቃን ገድልና ታሪክ በየዕለቱ የሚነበብበት ታላቅ መንፈሳዊ ድርሳን ነው። ለግል ቤተ-መጻሕፍትዎ በረከት የሚሆን የተሟላ ቅጽ ነው።',
+      en: 'The Synaxarium is a sacred collection of the lives, martyrdoms, and feasts of saints of the Ethiopian Orthodox Tewahedo Church, arranged for daily reading throughout the year.',
+    },
   },
 ];
 
@@ -41,6 +48,12 @@ export const MOCK_TRENDING_BOOKS: Book[] = [
     badge: 'discount',
     badgeLabel: { am: '-20%', en: '-20%' },
     itemType: 'book',
+    pageCount: 320,
+    isbn: '978-99944-5-882-1',
+    description: {
+      am: 'የሐዋርያት ጉዞና ተጋድሎ፣ የወንጌል ስብከትና የጥንቷ ቤተክርስቲያን ታሪክ በጥልቀት የተተነተነበት ድንቅ መጽሐፍ። ለመንፈሳዊ ዕውቀትና እምነት ማጠናከሪያ ታላቅ ምንጭ።',
+      en: 'An inspiring account of apostolic journeys, martyrdom, and the foundational history of the early Church.',
+    },
   },
   {
     id: 'book-2',
@@ -56,6 +69,12 @@ export const MOCK_TRENDING_BOOKS: Book[] = [
     badge: 'new',
     badgeLabel: { am: 'አዲስ', en: 'New' },
     itemType: 'book',
+    pageCount: 196,
+    isbn: '978-99944-3-441-9',
+    description: {
+      am: 'የዘወትር ጸሎት፣ ውዳሴ ማርያም፣ አንቀጸ ብርሃን እና የሰባቱ ቀናት ጸሎታት የተካተቱበት ንባቡ ግልጽና ምቹ የሆነ የጸሎት መጽሐፍ።',
+      en: 'Daily prayers including the Praise of Mary, Weddase Maryam, and weekly prayers with legible script and traditional layout.',
+    },
   },
   {
     id: 'item-1',
@@ -71,6 +90,10 @@ export const MOCK_TRENDING_BOOKS: Book[] = [
     badge: 'handmade',
     badgeLabel: { am: 'በእጅ የተሠራ', en: 'Handmade' },
     itemType: 'sacred_item',
+    description: {
+      am: 'ከጥንታዊ የወይራ እንጨት በገዳማውያን አባቶች በእጅ የተቀረጸ፣ ለመንፈሳዊ በረከትና ለጸሎት የሚሆን የእጅ መስቀልና መቁጠሪያ።',
+      en: 'Handcrafted olive wood cross and prayer rope made by monastery monks for prayer and spiritual blessing.',
+    },
   },
   {
     id: 'book-3',
@@ -87,5 +110,49 @@ export const MOCK_TRENDING_BOOKS: Book[] = [
     badge: 'discount',
     badgeLabel: { am: '-15%', en: '-15%' },
     itemType: 'book',
+    pageCount: 260,
+    isbn: '978-99944-7-210-3',
+    description: {
+      am: 'የቅዱሳን መላእክት የቅዱስ ሚካኤልና የቅዱስ ገብርኤል ተራዳኢነት፣ ተአምራትና የድርሳን ንባባት በወርሃዊ በዓላት የሚነበቡበት መጽሐፍ።',
+      en: 'The Homilies and Miracles of Archangels Michael and Gabriel, read during commemorations and monthly feast days.',
+    },
+  },
+  {
+    id: 'item-2',
+    title: { am: 'የብር መስቀል (Pectoral Silver Cross)', en: 'Pectoral Silver Cross' },
+    author: { am: 'የኰኵሐ ሃይማኖት ሰንበት ት/ቤት', en: 'Kokoha Haymanot Sunday School' },
+    publisher: { am: 'የኰኵሐ ሃይማኖት ሰንበት ት/ቤት', en: 'Kokoha Haymanot Sunday School' },
+    coverUrl: 'https://images.unsplash.com/photo-1544717305-2782549b5136?w=600&q=80',
+    price: 950,
+    originalPrice: 1100,
+    availability: 'in_stock',
+    categoryId: 'holy-books',
+    isTrending: true,
+    badge: 'handmade',
+    badgeLabel: { am: 'ንዋየ ቅድሳት', en: 'Sacred Item' },
+    itemType: 'sacred_item',
+    description: {
+      am: 'ከንጹሕ ብር በጥንቃቄ የተሠራ፣ ባህላዊ የኢትዮጵያ ኦርቶዶክስ ተዋሕዶ የደረት መስቀል ቅርፅ ያለው ክቡር ንዋይ።',
+      en: 'Pure silver pectoral cross crafted with traditional Ethiopian Orthodox cross filigree.',
+    },
+  },
+  {
+    id: 'item-3',
+    title: { am: 'የጽናዕ ማዕጠንትና እጣን', en: 'Traditional Censer & Incense' },
+    author: { am: 'የኰኵሐ ሃይማኖት ሰንበት ት/ቤት', en: 'Kokoha Haymanot Sunday School' },
+    publisher: { am: 'የኰኵሐ ሃይማኖት ሰንበት ት/ቤት', en: 'Kokoha Haymanot Sunday School' },
+    coverUrl: 'https://images.unsplash.com/photo-1607344645866-009c320c5ab8?w=600&q=80',
+    price: 680,
+    originalPrice: 750,
+    availability: 'in_stock',
+    categoryId: 'prayer',
+    isTrending: true,
+    badge: 'new',
+    badgeLabel: { am: 'አዲስ', en: 'New' },
+    itemType: 'sacred_item',
+    description: {
+      am: 'ባህላዊ የናስ ማዕጠንት ከጥራት ካለው የገዳም እጣንና ከሰል ጋር የተዘጋጀ የጸሎት ቤት ንዋየ ቅድሳት።',
+      en: 'Traditional brass censer set with premium monastery frankincense for home prayer.',
+    },
   },
 ];

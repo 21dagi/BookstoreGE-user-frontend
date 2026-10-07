@@ -20,7 +20,7 @@ const PlaceholderPage = ({ label }: { label: string }) => (
 );
 
 const CatalogPage = lazy(() => import('@/features/catalog/pages/CatalogPage'));
-const ProductDetailPage = lazy(() => Promise.resolve({ default: () => <PlaceholderPage label="Book Detail" /> }));
+const ProductDetailPage = lazy(() => import('@/features/catalog/pages/ProductDetailPage'));
 const SearchPage = lazy(() => Promise.resolve({ default: () => <PlaceholderPage label="Search" /> }));
 const SavedBooksPage = lazy(() => Promise.resolve({ default: () => <PlaceholderPage label="Saved Books" /> }));
 const CartPage = lazy(() => Promise.resolve({ default: () => <PlaceholderPage label="Cart" /> }));

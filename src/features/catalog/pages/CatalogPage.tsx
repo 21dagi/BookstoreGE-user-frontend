@@ -16,13 +16,16 @@ import { NotificationPanel } from '@/shared/components/display/NotificationPanel
 import { BookCard, BookCardSkeleton } from '@/features/home/components/BookCard';
 import { Skeleton } from '@/shared/ui/Skeleton';
 
+type Segment = 'books' | 'sacred_items';
+
 const CatalogPage: React.FC = () => {
   const { language, changeLanguage } = useLanguage();
   const { resolvedTheme, toggleTheme } = useThemeStore();
 
+  const [activeSegment, setActiveSegment] = useState<Segment>('books');
+  const [activeCategoryId, setActiveCategoryId] = useState('all');
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeCategoryId, setActiveCategoryId] = useState('all');
   const [notifOpen, setNotifOpen] = useState(false);
 
   const categories = useCatalogCategoriesQuery();
@@ -50,7 +53,12 @@ const CatalogPage: React.FC = () => {
   }
 
   const allBooks = trending.data ?? [];
+
+  // Filter by segment (books vs sacred items/properties), category, and search query
   const filteredBooks = allBooks.filter((b) => {
+    if (activeSegment === 'sacred_items') return b.itemType === 'sacred_item';
+    return b.itemType !== 'sacred_item';
+  }).filter((b) => {
     if (activeCategoryId === 'all') return true;
     return b.categoryId === activeCategoryId;
   }).filter((b) => {
@@ -65,13 +73,12 @@ const CatalogPage: React.FC = () => {
   const featuredBook = (featured.data ?? [])[0];
   const allCategories = categories.data ?? [];
 
-  const STORE_NAME = 'የኰኵሐ ሃይማኖት ሰንበት ት/ቤት';
-
   const t = {
+    title: language === 'am' ? 'መደብር' : 'Store',
     booksTab: language === 'am' ? 'መጻሕፍት' : 'Books',
-    gridTitle: language === 'am' ? 'ሁሉም መጻሕፍት' : 'All Books',
+    sacredTab: language === 'am' ? 'ንዋየ ቅድሳት' : 'Properties & Sacred Items',
     allCount: language === 'am' ? 'ሁሉም' : 'All',
-    searchPlaceholder: language === 'am' ? 'ርዕስ፣ ደራሲ...' : 'Search title, author...',
+    searchPlaceholder: language === 'am' ? 'ርዕስ፣ ደራሲ ወይም ንዋይ ፈልግ...' : 'Search books, authors, items...',
     monthlyPick: language === 'am' ? 'የወሩ ምርጫ' : 'Monthly Pick',
     seeAll: language === 'am' ? 'ሁሉንም እይ' : 'See All',
     newEdition: language === 'am' ? 'አዲስ እትም' : 'New Edition',
@@ -80,71 +87,82 @@ const CatalogPage: React.FC = () => {
   return (
     <div className="w-full bg-bg-primary text-text-primary min-h-screen flex flex-col pb-24">
 
-      {/* ── Compact Sticky Header ───────────────────────────────────────── */}
-      <header className="sticky top-0 z-40 bg-bg-primary/95 backdrop-blur-md border-b border-border-subtle px-4 pt-3 pb-2">
+      {/* ── Prominent Sticky Header with Shadow ───────────────────────── */}
+      <header className="sticky top-0 z-40 bg-bg-primary/95 backdrop-blur-md border-b border-border-subtle shadow-[0_2px_12px_rgba(0,0,0,0.06)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.4)] px-4 py-2.5">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-lg overflow-hidden shrink-0 border border-border-subtle">
-              <img src="/app-logo.png" alt={STORE_NAME} className="w-full h-full object-cover" />
+          <div className="flex items-center gap-2.5">
+            <div className="w-9 h-9 rounded-xl overflow-hidden shrink-0 shadow-sm border border-border-subtle">
+              <img src="/app-logo.png" alt="የኰኵሐ ሃይማኖት ሰንበት ት/ቤት" className="w-full h-full object-cover" />
             </div>
-            <span className="text-[15px] font-bold text-text-primary">{t.booksTab}</span>
+            <div className="flex flex-col">
+              <span className="text-[16px] font-extrabold text-text-primary leading-tight">
+                {activeSegment === 'books' ? t.booksTab : t.sacredTab}
+              </span>
+              <span className="text-[10.5px] font-medium text-text-muted leading-none mt-0.5">
+                {language === 'am' ? 'የኰኵሐ ሃይማኖት ሰንበት ት/ቤት' : 'Kokoha Haymanot'}
+              </span>
+            </div>
           </div>
 
-          <div className="flex items-center gap-1.5">
-            {/* Language */}
+          <div className="flex items-center gap-2">
+            {/* Globe Language Button */}
             <button
               onClick={handleLanguageToggle}
-              className="h-7 w-7 rounded-full bg-bg-card border border-border-subtle flex items-center justify-center shadow-sm active:scale-95 transition-transform"
-              aria-label="Toggle language"
+              className="h-9 px-2.5 rounded-full bg-bg-card border border-border-subtle shadow-sm hover:border-brand-500/50 flex items-center gap-1.5 active:scale-95 transition-all text-text-primary"
+              aria-label="Switch language"
             >
-              <span className="text-[10px] font-extrabold text-brand-500">{language === 'am' ? 'EN' : 'አማ'}</span>
+              <Icon name="Globe" size={15} className="text-brand-500 shrink-0" />
+              <span className="text-[11.5px] font-bold tracking-tight">
+                {language === 'am' ? 'አማ' : 'EN'}
+              </span>
             </button>
 
-            {/* Theme */}
+            {/* Dark/Light Toggle */}
             <button
               onClick={toggleTheme}
-              className="h-7 w-7 rounded-full bg-bg-card border border-border-subtle flex items-center justify-center shadow-sm active:scale-95 transition-all"
+              className="h-9 w-9 rounded-full bg-bg-card border border-border-subtle shadow-sm flex items-center justify-center text-text-primary active:scale-95 transition-all"
               aria-label="Toggle theme"
             >
-              {resolvedTheme === 'dark'
-                ? <Icon name="Sun" size={13} className="text-amber-400" />
-                : <Icon name="Moon" size={13} className="text-brand-500" />
-              }
+              {resolvedTheme === 'dark' ? (
+                <Icon name="Sun" size={17} className="text-amber-400" />
+              ) : (
+                <Icon name="Moon" size={17} className="text-brand-500" />
+              )}
             </button>
 
             {/* Search */}
             <button
               aria-label="Search"
               onClick={() => setSearchOpen((v) => !v)}
-              className="h-7 w-7 rounded-full bg-bg-card border border-border-subtle flex items-center justify-center active:scale-95 transition-transform"
+              className="h-9 w-9 rounded-full bg-bg-card border border-border-subtle shadow-sm flex items-center justify-center text-text-primary active:scale-95 transition-transform"
             >
-              <Icon name="Search" size={14} />
+              <Icon name="Search" size={17} />
             </button>
 
             {/* Notification bell */}
             <button
               onClick={() => setNotifOpen(true)}
-              className="relative h-7 w-7 rounded-full bg-bg-card border border-border-subtle flex items-center justify-center active:scale-95 transition-transform"
+              className="relative h-9 w-9 rounded-full bg-bg-card border border-border-subtle shadow-sm flex items-center justify-center text-text-primary active:scale-95 transition-transform"
               aria-label="Notifications"
             >
-              <Icon name="Bell" size={14} />
-              <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#E5484D]" />
+              <Icon name="Bell" size={18} />
+              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-[#E5484D]" />
             </button>
           </div>
         </div>
 
-        {/* Search input */}
+        {/* Search Input Drawer */}
         {searchOpen && (
-          <div className="mt-2 pb-0.5">
+          <div className="mt-2.5 pt-1">
             <div className="relative w-full">
-              <Icon name="Search" size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
+              <Icon name="Search" size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" />
               <input
                 autoFocus
                 type="search"
                 placeholder={t.searchPlaceholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-9 pl-9 pr-8 rounded-xl bg-bg-card border border-border-subtle text-text-primary placeholder:text-text-muted text-[12px] focus:outline-none focus:border-brand-500/50 shadow-sm transition-all"
+                className="w-full h-10 pl-10 pr-9 rounded-xl bg-bg-card border border-border-subtle text-text-primary placeholder:text-text-muted text-[13px] font-medium focus:outline-none focus:border-brand-500 shadow-sm transition-all"
               />
             </div>
           </div>
@@ -153,15 +171,45 @@ const CatalogPage: React.FC = () => {
 
       <main className="flex-1 flex flex-col pb-3">
 
-        {/* ── Category filter chips ───────────────────────────────── */}
-        <section className="py-2">
+        {/* ── Main Segment Tabs: Books & Properties (Restored!) ───────── */}
+        <section className="px-4 pt-3 pb-2">
+          <div className="p-1 rounded-2xl bg-bg-card border border-border-subtle shadow-sm flex items-center gap-1.5">
+            <button
+              onClick={() => setActiveSegment('books')}
+              className={cn(
+                'flex-1 py-2 px-3 rounded-xl text-[13px] font-bold flex items-center justify-center gap-2 transition-all duration-200',
+                activeSegment === 'books'
+                  ? 'bg-gradient-to-r from-[#7a2330] to-[#9E2B3E] text-white shadow-md'
+                  : 'text-text-secondary hover:text-text-primary hover:bg-bg-secondary font-semibold',
+              )}
+            >
+              <Icon name="BookOpen" size={16} />
+              <span>{t.booksTab}</span>
+            </button>
+            <button
+              onClick={() => setActiveSegment('sacred_items')}
+              className={cn(
+                'flex-1 py-2 px-3 rounded-xl text-[13px] font-bold flex items-center justify-center gap-2 transition-all duration-200',
+                activeSegment === 'sacred_items'
+                  ? 'bg-gradient-to-r from-[#7a2330] to-[#9E2B3E] text-white shadow-md'
+                  : 'text-text-secondary hover:text-text-primary hover:bg-bg-secondary font-semibold',
+              )}
+            >
+              <span className="text-base leading-none">⛪</span>
+              <span>{t.sacredTab}</span>
+            </button>
+          </div>
+        </section>
+
+        {/* ── Sub-Category Filter Chips ─────────────────────────────── */}
+        <section className="py-1">
           <div className="flex gap-2 overflow-x-auto px-4 no-scrollbar items-center">
             <button
               onClick={() => setActiveCategoryId('all')}
               className={cn(
-                'shrink-0 px-3 py-1 rounded-full font-bold text-[11px] transition-all shadow-sm',
+                'shrink-0 px-3.5 py-1.5 rounded-full font-bold text-[12px] transition-all shadow-sm',
                 activeCategoryId === 'all'
-                  ? 'bg-[#7a2330] text-white'
+                  ? 'bg-[#7a2330] text-white shadow-sm'
                   : 'bg-bg-card border border-border-subtle text-text-secondary hover:text-text-primary font-medium',
               )}
             >
@@ -173,7 +221,7 @@ const CatalogPage: React.FC = () => {
                 key={cat.id}
                 onClick={() => setActiveCategoryId(cat.id)}
                 className={cn(
-                  'shrink-0 px-3 py-1 rounded-full text-[11px] flex items-center gap-1 transition-all shadow-sm',
+                  'shrink-0 px-3.5 py-1.5 rounded-full text-[12px] flex items-center gap-1.5 transition-all shadow-sm',
                   activeCategoryId === cat.id
                     ? 'bg-[#7a2330] text-white font-bold'
                     : 'bg-bg-card border border-border-subtle text-text-secondary hover:text-text-primary font-medium',
@@ -186,16 +234,16 @@ const CatalogPage: React.FC = () => {
           </div>
         </section>
 
-        {/* ── Monthly Pick (same style as FeaturedCarousel card) ──── */}
-        {!isLoading && featuredBook && (
-          <section className="px-4 pb-2">
+        {/* ── Monthly Pick (Featured in Books segment) ──────────────── */}
+        {activeSegment === 'books' && !isLoading && featuredBook && (
+          <section className="px-4 pt-2 pb-2">
             <div className="flex items-center justify-between mb-2">
-              <h2 className="text-[15px] font-bold text-text-primary">{t.monthlyPick}</h2>
+              <h2 className="text-[16px] font-bold text-text-primary">{t.monthlyPick}</h2>
             </div>
             <Link
               to={ROUTES.CATALOG.DETAIL(featuredBook.id)}
               className="relative shrink-0 rounded-2xl overflow-hidden shadow-md bg-bg-secondary block"
-              style={{ aspectRatio: '16/11' }}
+              style={{ aspectRatio: '16/10' }}
               aria-label={featuredBook.title[language]}
             >
               <img
@@ -205,16 +253,16 @@ const CatalogPage: React.FC = () => {
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
-              <div className="absolute top-3 left-3">
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-bold text-brand-600 shadow-sm">
+              <div className="absolute top-3.5 left-3.5">
+                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-white/90 backdrop-blur-md text-[10.5px] font-bold text-brand-600 shadow-sm">
                   <span className="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse" />
                   ✦ {featuredBook.featuredLabel?.[language] ?? t.newEdition}
                 </span>
               </div>
-              <div className="absolute bottom-3 inset-x-3">
-                <span className="text-white/80 text-[11px] font-medium drop-shadow">{featuredBook.author[language]}</span>
-                <h3 className="text-white font-bold text-[14px] leading-tight drop-shadow">{featuredBook.title[language]}</h3>
-                <span className="text-white font-extrabold text-[12px] drop-shadow">
+              <div className="absolute bottom-3.5 inset-x-3.5">
+                <span className="text-white/80 text-[11.5px] font-medium drop-shadow">{featuredBook.author[language]}</span>
+                <h3 className="text-white font-bold text-[15px] leading-tight drop-shadow mt-0.5">{featuredBook.title[language]}</h3>
+                <span className="text-white font-extrabold text-[13px] drop-shadow mt-1 block">
                   {featuredBook.price.toLocaleString()} {language === 'am' ? 'ብር' : 'ETB'}
                 </span>
               </div>
@@ -228,29 +276,38 @@ const CatalogPage: React.FC = () => {
           </section>
         )}
 
-        {/* ── Grid: All Books (same style as Trending BookCard) ─────── */}
-        <section className="px-4 pb-2">
-          <div className="flex items-center justify-between mb-2">
-            <h2 className="text-[15px] font-bold text-text-primary">{t.gridTitle}</h2>
-            <span className="text-[11px] text-text-muted">{filteredBooks.length} {language === 'am' ? 'ዓይነት' : 'items'}</span>
+        {/* ── Items Grid ────────────────────────────────────────────── */}
+        <section className="px-4 pt-2 pb-2">
+          <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center gap-1.5">
+              <div className="w-2 h-2 rounded-full bg-[#7a2330]" />
+              <h2 className="text-[16px] font-bold text-text-primary">
+                {activeSegment === 'books' ? (language === 'am' ? 'የመጻሕፍት ዝርዝር' : 'All Books') : t.sacredTab}
+              </h2>
+            </div>
+            <span className="text-[11.5px] font-semibold text-text-muted">
+              {filteredBooks.length} {language === 'am' ? 'ዓይነት' : 'items'}
+            </span>
           </div>
 
           {isLoading ? (
-            <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
+            <div className="grid grid-cols-2 gap-3.5">
               <BookCardSkeleton count={4} />
             </div>
           ) : filteredBooks.length === 0 ? (
-            <div className="text-center py-8 text-text-muted text-sm">
-              {language === 'am' ? 'ምንም አልተገኘም' : 'Nothing found'}
+            <div className="text-center py-12 text-text-muted flex flex-col items-center gap-2">
+              <Icon name="BookOpen" size={36} className="opacity-30" />
+              <span className="text-sm font-medium">{language === 'am' ? 'ምንም አልተገኘም' : 'No items found'}</span>
             </div>
           ) : (
-            <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
+            <div className="grid grid-cols-2 gap-3.5">
               {filteredBooks.map((book) => (
-                <BookCard
-                  key={book.id}
-                  book={book}
-                  onToggleSaved={(id) => toggleSaved.mutate(id)}
-                />
+                <div key={book.id} className="w-full">
+                  <BookCard
+                    book={book}
+                    onToggleSaved={(id) => toggleSaved.mutate(id)}
+                  />
+                </div>
               ))}
             </div>
           )}

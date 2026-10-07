@@ -26,7 +26,7 @@ export const BackButton: React.FC<BackButtonProps> = ({ onBack, className }) => 
       type="button"
       onClick={handleBack}
       className={cn(
-        'p-1 rounded-lg text-text-primary hover:bg-bg-secondary min-h-[36px] min-w-[36px] flex items-center justify-center transition-colors active:scale-95',
+        'w-9 h-9 rounded-full bg-bg-card border border-border-subtle shadow-sm text-text-primary hover:border-brand-500/50 flex items-center justify-center transition-all active:scale-95 shrink-0',
         className,
       )}
       aria-label={t('common.back')}
