@@ -26,12 +26,12 @@ export const BackButton: React.FC<BackButtonProps> = ({ onBack, className }) => 
       type="button"
       onClick={handleBack}
       className={cn(
-        'p-1.5 -ml-2 rounded-lg text-text-primary hover:bg-bg-secondary min-h-[44px] min-w-[44px] flex items-center justify-center transition-colors',
+        'p-1 rounded-lg text-text-primary hover:bg-bg-secondary min-h-[36px] min-w-[36px] flex items-center justify-center transition-colors active:scale-95',
         className,
       )}
       aria-label={t('common.back')}
     >
-      <Icon name="ChevronLeft" size={24} />
+      <Icon name="ChevronLeft" size={20} />
     </button>
   );
 };

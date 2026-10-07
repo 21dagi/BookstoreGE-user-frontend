@@ -10,6 +10,7 @@ import { Spinner } from '@/shared/ui/Spinner';
 // ─── Lazy Page Imports ───────────────────────────────────────────────────────
 
 const HomePage = lazy(() => import('@/features/home/pages/HomePage'));
+const NewsPage = lazy(() => import('@/features/home/pages/NewsPage'));
 
 // Placeholder pages — replaced in Phase 2 one by one
 const PlaceholderPage = ({ label }: { label: string }) => (
@@ -31,8 +32,6 @@ const WalletDepositPage = lazy(() => Promise.resolve({ default: () => <Placehold
 const EqubPage = lazy(() => import('@/features/equb/pages/EqubPage'));
 const EqubDetailPage = lazy(() => Promise.resolve({ default: () => <PlaceholderPage label="Equb Detail" /> }));
 const PaymentPage = lazy(() => Promise.resolve({ default: () => <PlaceholderPage label="Payment" /> }));
-const NotificationsPage = lazy(() => Promise.resolve({ default: () => <PlaceholderPage label="Notifications" /> }));
-const ProfilePage = lazy(() => Promise.resolve({ default: () => <PlaceholderPage label="Profile" /> }));
 const SettingsPage = lazy(() => Promise.resolve({ default: () => <PlaceholderPage label="Settings" /> }));
 
 const suspense = (el: React.ReactNode) => (
@@ -56,7 +55,7 @@ export const router = createBrowserRouter([
           { path: ROUTES.CATALOG.ROOT, element: suspense(<CatalogPage />) },
           { path: ROUTES.EQUB.ROOT, element: suspense(<EqubPage />) },
           { path: ROUTES.WALLET.ROOT, element: suspense(<WalletPage />) },
-          { path: ROUTES.PROFILE.ROOT, element: suspense(<ProfilePage />) },
+          { path: ROUTES.PROFILE.ROOT, element: suspense(<NewsPage />) },
         ],
       },
       // Stack screens (pushed, with back button)
@@ -71,7 +70,6 @@ export const router = createBrowserRouter([
           { path: ROUTES.ORDERS.DETAIL(), element: suspense(<OrderDetailPage />) },
           { path: ROUTES.WALLET.DEPOSIT, element: suspense(<WalletDepositPage />) },
           { path: ROUTES.EQUB.DETAIL(), element: suspense(<EqubDetailPage />) },
-          { path: ROUTES.NOTIFICATIONS, element: suspense(<NotificationsPage />) },
           { path: ROUTES.PROFILE.SETTINGS, element: suspense(<SettingsPage />) },
         ],
       },

@@ -1,6 +1,6 @@
 {
   "common": {
-    "appName": "Gedame Eyesus",
+    "appName": "Kokoha Haymanot Sunday School",
     "bookstore": "Bookstore",
     "equb": "Book Equb",
     "back": "Back",
@@ -31,6 +31,7 @@
     "books": "Books",
     "equb": "Equb",
     "wallet": "Wallet",
+    "news": "News",
     "profile": "Profile",
     "cart": "Cart"
   },

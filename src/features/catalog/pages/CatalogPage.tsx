@@ -3,7 +3,6 @@ import { Link } from 'react-router-dom';
 import { useLanguage } from '@/shared/i18n';
 import { ROUTES } from '@/shared/constants';
 import { ErrorState } from '@/shared/ui/ErrorState';
-import { telegramAdapter } from '@/shared/telegram';
 import { cn } from '@/shared/lib';
 import {
   useCatalogCategoriesQuery,
@@ -11,20 +10,20 @@ import {
   useTrendingBooksQuery,
   useToggleSavedMutation,
 } from '@/features/catalog/api';
-import { CatalogCard, CatalogCardSkeleton, SpotlightHero } from '@/features/catalog/components';
-import { Avatar } from '@/shared/ui/Avatar';
-
-type Segment = 'books' | 'sacred_items';
+import { Icon } from '@/shared/ui/Icon';
+import { useThemeStore } from '@/shared/theme';
+import { NotificationPanel } from '@/shared/components/display/NotificationPanel';
+import { BookCard, BookCardSkeleton } from '@/features/home/components/BookCard';
+import { Skeleton } from '@/shared/ui/Skeleton';
 
 const CatalogPage: React.FC = () => {
   const { language, changeLanguage } = useLanguage();
-  const user = telegramAdapter.getUser();
-  const displayName = user?.first_name ?? 'ቴዎድሮስ';
+  const { resolvedTheme, toggleTheme } = useThemeStore();
 
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [activeSegment, setActiveSegment] = useState<Segment>('books');
   const [activeCategoryId, setActiveCategoryId] = useState('all');
+  const [notifOpen, setNotifOpen] = useState(false);
 
   const categories = useCatalogCategoriesQuery();
   const featured = useFeaturedBooksQuery();
@@ -52,10 +51,6 @@ const CatalogPage: React.FC = () => {
 
   const allBooks = trending.data ?? [];
   const filteredBooks = allBooks.filter((b) => {
-    if (activeSegment === 'sacred_items') return b.itemType === 'sacred_item';
-    if (activeSegment === 'books') return b.itemType !== 'sacred_item';
-    return true;
-  }).filter((b) => {
     if (activeCategoryId === 'all') return true;
     return b.categoryId === activeCategoryId;
   }).filter((b) => {
@@ -70,182 +65,118 @@ const CatalogPage: React.FC = () => {
   const featuredBook = (featured.data ?? [])[0];
   const allCategories = categories.data ?? [];
 
+  const STORE_NAME = 'የኰኵሐ ሃይማኖት ሰንበት ት/ቤት';
+
   const t = {
     booksTab: language === 'am' ? 'መጻሕፍት' : 'Books',
-    sacredTab: language === 'am' ? 'ንዋየ ቅድሳት' : 'Sacred Items',
-    gridTitle: language === 'am' ? 'የተመረጡ መጻሕፍትና ንዋያተ ቅድሳት' : 'Featured Books & Sacred Items',
-    inStoreOnly: language === 'am' ? 'በቦታው ብቻ' : 'In-Store Only',
-    pickup: language === 'am' ? 'ትዕዛዝዎ በቅድስት ሥላሴ ካቴድራል መደብር በአካል ይዘጋጃል (In-Store Pickup Only)' : 'Your order will be prepared at Holy Trinity Cathedral Store (In-Store Pickup Only)',
+    gridTitle: language === 'am' ? 'ሁሉም መጻሕፍት' : 'All Books',
     allCount: language === 'am' ? 'ሁሉም' : 'All',
-    searchPlaceholder: language === 'am' ? 'ርዕስ፣ ደራሲ ወይም በርዕሰ ጉዳይ ይፈልጉ...' : 'Search by title, author...',
-    storeSubtitle: language === 'am' ? 'ቅድስት ሥላሴ መደብር' : 'Holy Trinity Store',
+    searchPlaceholder: language === 'am' ? 'ርዕስ፣ ደራሲ...' : 'Search title, author...',
+    monthlyPick: language === 'am' ? 'የወሩ ምርጫ' : 'Monthly Pick',
+    seeAll: language === 'am' ? 'ሁሉንም እይ' : 'See All',
+    newEdition: language === 'am' ? 'አዲስ እትም' : 'New Edition',
   };
 
   return (
-    <div className="w-full bg-bg-primary text-text-primary min-h-screen flex flex-col pb-20">
+    <div className="w-full bg-bg-primary text-text-primary min-h-screen flex flex-col pb-24">
 
-      {/* ── Sticky Header ─────────────────────────────────────────── */}
-      <header className="sticky top-0 z-40 bg-bg-primary/95 backdrop-blur-md border-b border-border-subtle px-5 pt-4 pb-2">
+      {/* ── Compact Sticky Header ───────────────────────────────────────── */}
+      <header className="sticky top-0 z-40 bg-bg-primary/95 backdrop-blur-md border-b border-border-subtle px-4 pt-3 pb-2">
         <div className="flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <img
-              src="/app-logo.png"
-              alt="ኮከበ ሃይማኖት"
-              className="w-10 h-10 rounded-2xl object-cover border border-orange-200/40 shadow-sm shrink-0"
-            />
-            <div className="flex flex-col">
-              <div className="flex items-center gap-1.5">
-                <h1 className="text-[17px] font-bold text-text-primary leading-tight">{t.booksTab}</h1>
-                <span className="text-[11px] font-semibold text-text-muted">· Books</span>
-              </div>
-              <span className="text-[11px] text-text-secondary leading-tight mt-0.5 flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-                {t.storeSubtitle}
-              </span>
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg overflow-hidden shrink-0 border border-border-subtle">
+              <img src="/app-logo.png" alt={STORE_NAME} className="w-full h-full object-cover" />
             </div>
+            <span className="text-[15px] font-bold text-text-primary">{t.booksTab}</span>
           </div>
 
-          {/* Actions */}
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
+            {/* Language */}
             <button
               onClick={handleLanguageToggle}
-              className="px-2 py-1 rounded-full text-[11px] font-bold border border-border-subtle bg-bg-card text-brand-500 shadow-sm active:scale-95 transition-transform"
+              className="h-7 w-7 rounded-full bg-bg-card border border-border-subtle flex items-center justify-center shadow-sm active:scale-95 transition-transform"
               aria-label="Toggle language"
             >
-              {language === 'am' ? 'EN' : 'አማ'}
+              <span className="text-[10px] font-extrabold text-brand-500">{language === 'am' ? 'EN' : 'አማ'}</span>
             </button>
+
+            {/* Theme */}
+            <button
+              onClick={toggleTheme}
+              className="h-7 w-7 rounded-full bg-bg-card border border-border-subtle flex items-center justify-center shadow-sm active:scale-95 transition-all"
+              aria-label="Toggle theme"
+            >
+              {resolvedTheme === 'dark'
+                ? <Icon name="Sun" size={13} className="text-amber-400" />
+                : <Icon name="Moon" size={13} className="text-brand-500" />
+              }
+            </button>
+
+            {/* Search */}
             <button
               aria-label="Search"
-              id="catalog-search-btn"
               onClick={() => setSearchOpen((v) => !v)}
-              className="w-9 h-9 rounded-full bg-bg-card shadow-sm border border-border-subtle flex items-center justify-center text-text-primary active:scale-95 transition-transform"
+              className="h-7 w-7 rounded-full bg-bg-card border border-border-subtle flex items-center justify-center active:scale-95 transition-transform"
             >
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
-              </svg>
+              <Icon name="Search" size={14} />
             </button>
-            <Link
-              to={ROUTES.CART.ROOT}
-              aria-label="Cart"
-              className="relative w-9 h-9 rounded-full bg-bg-card shadow-sm border border-border-subtle flex items-center justify-center text-text-primary active:scale-95 transition-transform"
+
+            {/* Notification bell */}
+            <button
+              onClick={() => setNotifOpen(true)}
+              className="relative h-7 w-7 rounded-full bg-bg-card border border-border-subtle flex items-center justify-center active:scale-95 transition-transform"
+              aria-label="Notifications"
             >
-              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z" /><line x1="3" y1="6" x2="21" y2="6" /><path d="M16 10a4 4 0 0 1-8 0" />
-              </svg>
-              <span className="absolute -top-1 -right-1 w-4 h-4 bg-brand-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm border-2 border-bg-card">
-                2
-              </span>
-            </Link>
-            <div className="relative pl-0.5">
-              <Avatar name={displayName} src={user?.photo_url} size="sm" />
-              <span className="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full border-2 border-bg-card" />
-            </div>
+              <Icon name="Bell" size={14} />
+              <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#E5484D]" />
+            </button>
           </div>
         </div>
 
         {/* Search input */}
         {searchOpen && (
-          <div className="mt-2.5 pb-1">
+          <div className="mt-2 pb-0.5">
             <div className="relative w-full">
-              <svg className="absolute left-3.5 top-1/2 -translate-y-1/2 text-text-muted" width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
-              </svg>
+              <Icon name="Search" size={15} className="absolute left-3 top-1/2 -translate-y-1/2 text-text-muted" />
               <input
                 autoFocus
                 type="search"
                 placeholder={t.searchPlaceholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full h-10 pl-10 pr-9 rounded-xl bg-bg-card border border-border-subtle text-text-primary placeholder:text-text-muted text-[13px] font-medium focus:outline-none focus:border-brand-500/50 shadow-sm transition-all"
+                className="w-full h-9 pl-9 pr-8 rounded-xl bg-bg-card border border-border-subtle text-text-primary placeholder:text-text-muted text-[12px] focus:outline-none focus:border-brand-500/50 shadow-sm transition-all"
               />
             </div>
           </div>
         )}
       </header>
 
-      <main className="flex-1 flex flex-col pb-4">
+      <main className="flex-1 flex flex-col pb-3">
 
-        {/* ── Segment Tabs: Books / Sacred Items ─────────────────── */}
-        <section className="px-5 pt-3 pb-1">
-          <div className="p-1 rounded-2xl bg-bg-secondary flex items-center gap-1 shadow-inner border border-border-subtle">
+        {/* ── Category filter chips ───────────────────────────────── */}
+        <section className="py-2">
+          <div className="flex gap-2 overflow-x-auto px-4 no-scrollbar items-center">
             <button
-              id="segment-books"
-              onClick={() => setActiveSegment('books')}
-              className={cn(
-                'flex-1 py-2 px-3 rounded-xl text-[13px] flex items-center justify-center gap-1.5 transition-all',
-                activeSegment === 'books'
-                  ? 'bg-brand-500 text-white font-bold shadow-[0_2px_8px_rgba(122,35,48,0.28)]'
-                  : 'bg-bg-card hover:bg-bg-card/80 text-text-secondary hover:text-text-primary font-medium border border-border-subtle/80 active:scale-[0.98]',
-              )}
-            >
-              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" /><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
-              </svg>
-              <span>{t.booksTab}</span>
-            </button>
-            <button
-              id="segment-sacred"
-              onClick={() => setActiveSegment('sacred_items')}
-              className={cn(
-                'flex-1 py-2 px-3 rounded-xl text-[13px] flex items-center justify-center gap-1.5 transition-all',
-                activeSegment === 'sacred_items'
-                  ? 'bg-[#7A2330] text-white font-bold shadow-[0_2px_8px_rgba(122,35,48,0.28)]'
-                  : 'bg-[#FAF6F2] hover:bg-white text-[#2A2326] font-medium border border-[#EAE2D8]/80 active:scale-[0.98]',
-              )}
-            >
-              <span className="text-[#B2782A] text-[15px]">⛪</span>
-              <span>{t.sacredTab}</span>
-            </button>
-          </div>
-        </section>
-
-        {/* ── Spotlight Hero ──────────────────────────────────────── */}
-        <section className="px-5 pt-3 pb-2">
-          {isLoading ? (
-            <div className="w-full aspect-[16/10] rounded-3xl bg-[#F0E9E0] animate-pulse" />
-          ) : featuredBook ? (
-            <SpotlightHero
-              book={featuredBook}
-              language={language}
-              onToggleSaved={(id) => toggleSaved.mutate(id)}
-            />
-          ) : null}
-        </section>
-
-        {/* ── Sub-category filter chips ───────────────────────────── */}
-        <section className="py-2.5">
-          <div className="flex gap-2 overflow-x-auto px-5 no-scrollbar items-center">
-            {/* All chip */}
-            <button
-              id="chip-all"
               onClick={() => setActiveCategoryId('all')}
               className={cn(
-                'shrink-0 px-3.5 py-1.5 rounded-full font-bold text-[12px] flex items-center gap-1 shadow-sm transition-all',
+                'shrink-0 px-3 py-1 rounded-full font-bold text-[11px] transition-all shadow-sm',
                 activeCategoryId === 'all'
                   ? 'bg-[#7a2330] text-white'
-                  : 'bg-white border border-[#E5DDD2] text-[#4A3F43] hover:text-[#7a2330] font-medium shadow-sm',
+                  : 'bg-bg-card border border-border-subtle text-text-secondary hover:text-text-primary font-medium',
               )}
             >
-              <span>{t.allCount}</span>
-              <span className={cn(
-                'text-[10px] font-bold px-1.5 py-0.5 rounded-full ml-0.5',
-                activeCategoryId === 'all' ? 'bg-white/20' : 'bg-[#F0E9E0] text-[#7a2330]',
-              )}>
-                {allBooks.length}
-              </span>
+              {t.allCount}
             </button>
 
-            {/* Category chips */}
             {allCategories.filter((c) => c.id !== 'all').map((cat) => (
               <button
                 key={cat.id}
-                id={`chip-${cat.id}`}
                 onClick={() => setActiveCategoryId(cat.id)}
                 className={cn(
-                  'shrink-0 px-3.5 py-1.5 rounded-full text-[12px] flex items-center gap-1.5 transition-all',
+                  'shrink-0 px-3 py-1 rounded-full text-[11px] flex items-center gap-1 transition-all shadow-sm',
                   activeCategoryId === cat.id
-                    ? 'bg-[#7a2330] text-white font-bold shadow-sm'
-                    : 'bg-white border border-[#E5DDD2] text-[#4A3F43] hover:text-[#7a2330] font-medium shadow-sm',
+                    ? 'bg-[#7a2330] text-white font-bold'
+                    : 'bg-bg-card border border-border-subtle text-text-secondary hover:text-text-primary font-medium',
                 )}
               >
                 {cat.emoji && <span>{cat.emoji}</span>}
@@ -255,32 +186,67 @@ const CatalogPage: React.FC = () => {
           </div>
         </section>
 
-        {/* ── 2-Column Grid ───────────────────────────────────────── */}
-        <section className="px-4 pt-2 pb-2">
-          <div className="flex items-center justify-between mb-3 px-1">
-            <div className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#5c0b1c]" />
-              <h3 className="text-[17px] font-bold text-[#241E20]">{t.gridTitle}</h3>
+        {/* ── Monthly Pick (same style as FeaturedCarousel card) ──── */}
+        {!isLoading && featuredBook && (
+          <section className="px-4 pb-2">
+            <div className="flex items-center justify-between mb-2">
+              <h2 className="text-[15px] font-bold text-text-primary">{t.monthlyPick}</h2>
             </div>
-            <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-orange-100/70 text-[#B2782A] border border-orange-200/50">
-              {t.inStoreOnly}
-            </span>
+            <Link
+              to={ROUTES.CATALOG.DETAIL(featuredBook.id)}
+              className="relative shrink-0 rounded-2xl overflow-hidden shadow-md bg-bg-secondary block"
+              style={{ aspectRatio: '16/11' }}
+              aria-label={featuredBook.title[language]}
+            >
+              <img
+                src={featuredBook.coverUrl}
+                alt={featuredBook.title[language]}
+                className="w-full h-full object-cover"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/30 to-black/10" />
+              <div className="absolute top-3 left-3">
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-white/90 backdrop-blur-md text-[10px] font-bold text-brand-600 shadow-sm">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-600 animate-pulse" />
+                  ✦ {featuredBook.featuredLabel?.[language] ?? t.newEdition}
+                </span>
+              </div>
+              <div className="absolute bottom-3 inset-x-3">
+                <span className="text-white/80 text-[11px] font-medium drop-shadow">{featuredBook.author[language]}</span>
+                <h3 className="text-white font-bold text-[14px] leading-tight drop-shadow">{featuredBook.title[language]}</h3>
+                <span className="text-white font-extrabold text-[12px] drop-shadow">
+                  {featuredBook.price.toLocaleString()} {language === 'am' ? 'ብር' : 'ETB'}
+                </span>
+              </div>
+            </Link>
+          </section>
+        )}
+
+        {isLoading && (
+          <section className="px-4 pb-2">
+            <Skeleton height={180} className="rounded-2xl" />
+          </section>
+        )}
+
+        {/* ── Grid: All Books (same style as Trending BookCard) ─────── */}
+        <section className="px-4 pb-2">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-[15px] font-bold text-text-primary">{t.gridTitle}</h2>
+            <span className="text-[11px] text-text-muted">{filteredBooks.length} {language === 'am' ? 'ዓይነት' : 'items'}</span>
           </div>
 
           {isLoading ? (
-            <div className="grid grid-cols-2 gap-3.5">
-              {Array.from({ length: 4 }).map((_, i) => (
-                <CatalogCardSkeleton key={i} />
-              ))}
+            <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
+              <BookCardSkeleton count={4} />
             </div>
           ) : filteredBooks.length === 0 ? (
-            <div className="text-center py-10 text-[#A39A9D] text-sm">
+            <div className="text-center py-8 text-text-muted text-sm">
               {language === 'am' ? 'ምንም አልተገኘም' : 'Nothing found'}
             </div>
           ) : (
-            <div className="grid grid-cols-2 gap-3.5" id="books-grid">
+            <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
               {filteredBooks.map((book) => (
-                <CatalogCard
+                <BookCard
                   key={book.id}
                   book={book}
                   onToggleSaved={(id) => toggleSaved.mutate(id)}
@@ -289,27 +255,9 @@ const CatalogPage: React.FC = () => {
             </div>
           )}
         </section>
-
-        {/* ── In-Store Pickup Banner ──────────────────────────────── */}
-        <section className="px-5 mt-3 mb-1">
-          <div className="bg-white border border-[#EEE8E2] rounded-2xl p-3 flex items-center gap-2.5 shadow-sm">
-            <span className="w-7 h-7 rounded-full bg-orange-100/70 flex items-center justify-center text-[15px] shrink-0">
-              📦
-            </span>
-            <p className="text-[11.5px] text-[#7A7073] leading-snug">
-              {language === 'am' ? (
-                <>
-                  ትዕዛዝዎ በ<span className="font-semibold text-[#241E20]">ቅድስት ሥላሴ ካቴድራል መደብር</span> በአካል ይዘጋጃል (In-Store Pickup Only)
-                </>
-              ) : (
-                <>
-                  Your order is prepared at <span className="font-semibold text-[#241E20]">Holy Trinity Cathedral Store</span> (In-Store Pickup Only)
-                </>
-              )}
-            </p>
-          </div>
-        </section>
       </main>
+
+      <NotificationPanel open={notifOpen} onClose={() => setNotifOpen(false)} unreadCount={2} />
     </div>
   );
 };

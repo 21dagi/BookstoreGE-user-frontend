@@ -12,8 +12,8 @@ export const MOCK_FEATURED_BOOKS: FeaturedBook[] = [
   {
     id: 'featured-1',
     title: { am: 'መጽሐፈ ስንክሳር (Synaxarium)', en: 'Synaxarium' },
-    author: { am: 'ቅድስት ሥላሴ ማተሚያ ቤት', en: 'Holy Trinity Press' },
-    publisher: { am: 'ቅድስት ሥላሴ ማተሚያ ቤት', en: 'Holy Trinity Press' },
+    author: { am: 'የኰኵሐ ሃይማኖት ሰንበት ት/ቤት', en: 'Kokoha Haymanot Sunday School' },
+    publisher: { am: 'የኰኵሐ ሃይማኖት ሰንበት ት/ቤት', en: 'Kokoha Haymanot Sunday School' },
     coverUrl: 'https://lh3.googleusercontent.com/aida-public/AB6AXuCT2xRcPNhmJDNcfgotBT0g7IxuT2rFFZ29UnzshqMfKpI4r-yRy1nEBkURRxpeNHAbayd5reUXh1nK7yyoaru2GuV9VctaA6J4gt0RDLIm8sjgXbdx3upZuh-UZYXGKdBj86c40e2JCM-jwdBwWqj2HGDHHs7rBtJ0I2geSPdB-co3jgJtat1-sZsD5pIARUgj5BqUT6RphmbBs9COjzwvh77nOP10CuQVFdQ3NqZ-2EdA5AGkwr6p',
     price: 1850,
     originalPrice: 2100,

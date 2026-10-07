@@ -5,29 +5,20 @@ import { ErrorState } from '@/shared/ui/ErrorState';
 import { ROUTES } from '@/shared/constants';
 import { useHomeData } from '../hooks/useHomeData';
 import { HomeHeader } from '../components/HomeHeader';
-import { CategoryChips } from '../components/CategoryChips';
 import { WalletBanner } from '../components/WalletBanner';
 import { FeaturedCarousel } from '../components/FeaturedCarousel';
 import { BookCard, BookCardSkeleton } from '../components/BookCard';
-import { PickupNote } from '../components/PickupNote';
 
 const HomePage: React.FC = () => {
-  const { language, changeLanguage } = useLanguage();
+  const { language } = useLanguage();
   const {
-    categories,
     featuredBooks,
     trendingBooks,
-    activeCategoryId,
-    setActiveCategoryId,
     isLoading,
     hasError,
     refetchAll,
     handleToggleSaved,
   } = useHomeData();
-
-  const handleLanguageToggle = () => {
-    changeLanguage(language === 'am' ? 'en' : 'am');
-  };
 
   if (hasError) {
     return (
@@ -42,52 +33,35 @@ const HomePage: React.FC = () => {
   const headlineLabel = language === 'am' ? 'ዛሬ ምን ማንበብ ይፈልጋሉ?' : 'What will you read today?';
 
   return (
-    <div className="w-full pb-20 bg-bg-primary min-h-screen">
-      {/* Header: greeting + language + notifications */}
-      <HomeHeader
-        unreadCount={2}
-        onLanguageToggle={handleLanguageToggle}
-      />
+    <div className="w-full pb-24 bg-bg-primary min-h-screen">
+      {/* Header */}
+      <HomeHeader unreadCount={2} />
 
-      {/* Big headline */}
-      <section className="px-5 pt-4 pb-3">
-        <h1 className="text-[26px] font-extrabold text-text-primary leading-[1.25] tracking-tight max-w-[280px]">
+      {/* Headline */}
+      <section className="px-4 pt-2 pb-1.5">
+        <h1 className="text-[22px] font-extrabold text-text-primary leading-[1.25] tracking-tight max-w-[260px]">
           {headlineLabel}
         </h1>
       </section>
 
-      {/* Category filter pills */}
-      <CategoryChips
-        categories={categories}
-        activeCategoryId={activeCategoryId}
-        onSelect={setActiveCategoryId}
-        isLoading={isLoading}
-      />
-
-      {/* Wallet balance + deposit CTA */}
-      <WalletBanner
-        balance={1450}
-        isLoading={false}
-      />
+      {/* Wallet balance */}
+      <WalletBanner balance={1450} isLoading={false} />
 
       {/* Featured books carousel */}
-      <FeaturedCarousel
-        books={featuredBooks}
-        isLoading={isLoading}
-      />
+      <FeaturedCarousel books={featuredBooks} isLoading={isLoading} />
 
-      {/* Trending books horizontal scroll */}
-      <section className="pt-4 pb-2">
-        <div className="px-5 flex items-center justify-between mb-3">
-          <h2 className="text-[18px] font-bold text-text-primary">{trendingLabel}</h2>
+      {/* Trending books */}
+      <section className="pt-2 pb-2">
+        <div className="px-4 flex items-center justify-between mb-2">
+          <h2 className="text-[16px] font-bold text-text-primary">{trendingLabel}</h2>
           <Link
             to={ROUTES.CATALOG.ROOT}
-            className="text-[13px] font-semibold text-accent-500 hover:text-brand-500 transition-colors"
+            className="text-[12px] font-semibold text-accent-500 hover:text-brand-500 transition-colors"
           >
             {seeAllLabel}
           </Link>
         </div>
-        <div className="flex gap-3.5 overflow-x-auto px-5 no-scrollbar pb-2">
+        <div className="flex gap-3 overflow-x-auto px-4 no-scrollbar pb-1">
           {isLoading ? (
             <BookCardSkeleton count={3} />
           ) : (
@@ -101,9 +75,6 @@ const HomePage: React.FC = () => {
           )}
         </div>
       </section>
-
-      {/* In-store pickup trust note */}
-      <PickupNote />
     </div>
   );
 };

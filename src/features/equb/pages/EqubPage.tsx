@@ -1,23 +1,17 @@
 import React, { useState } from 'react';
 import { useLanguage } from '@/shared/i18n';
-import { telegramAdapter } from '@/shared/telegram';
 import { ErrorState } from '@/shared/ui/ErrorState';
-import { Avatar } from '@/shared/ui/Avatar';
 import { cn } from '@/shared/lib';
-import {
-  useMyEqubQuery,
-  useOpenEqubsQuery,
-  usePayContributionMutation,
-  useJoinEqubMutation,
-} from '@/features/equb/api';
+import { useMyEqubQuery, useOpenEqubsQuery, usePayContributionMutation, useJoinEqubMutation } from '@/features/equb/api';
 import { OpenEqubGroup } from '@/features/equb/types';
+import { useThemeStore } from '@/shared/theme';
+import { Icon } from '@/shared/ui/Icon';
+import { NotificationPanel } from '@/shared/components/display/NotificationPanel';
 
 type EqubTab = 'my' | 'open';
 
 export const EqubPage: React.FC = () => {
   const { language, changeLanguage } = useLanguage();
-  const user = telegramAdapter.getUser();
-  const displayName = user?.first_name ?? 'ቴዎድሮስ';
 
   const [activeTab, setActiveTab] = useState<EqubTab>('my');
   const [searchQuery, setSearchQuery] = useState('');
@@ -37,10 +31,6 @@ export const EqubPage: React.FC = () => {
 
   const myEqub = myEqubQuery.data;
   const openEqubs = openEqubsQuery.data ?? [];
-
-  const handleLanguageToggle = () => {
-    changeLanguage(language === 'am' ? 'en' : 'am');
-  };
 
   const handlePay = async (amount: number, round: number) => {
     if (!myEqub) return;
@@ -77,9 +67,12 @@ export const EqubPage: React.FC = () => {
     }
   };
 
+  const { resolvedTheme, toggleTheme } = useThemeStore();
+  const [notifOpen, setNotifOpen] = useState(false);
+
   const t = {
     title: language === 'am' ? 'መጽሐፍ እቁብ' : 'Book Equb',
-    subtitle: language === 'am' ? 'ቅድስት ሥላሴ መጽሐፍ መደብር' : 'Holy Trinity Cathedral Bookstore',
+    subtitle: language === 'am' ? 'የኰኵሐ ሃይማኖት ሰንበት ት/ቤት' : 'Kokoha Haymanot Sunday School',
     tabMy: language === 'am' ? 'የእኔ እቁቦች (1)' : 'My Equbs (1)',
     tabOpen: language === 'am' ? 'ክፍት እቁቦች (3)' : 'Open Equbs (3)',
     activeCycle: language === 'am' ? 'ንቁ ዑደት' : 'Active Cycle',
@@ -119,8 +112,8 @@ export const EqubPage: React.FC = () => {
     whatIsEqubTitle: language === 'am' ? 'የመጽሐፍ እቁብ ምንድን ነው?' : 'What is Book Equb?',
     whatIsEqubBody:
       language === 'am'
-        ? 'የመጽሐፍ እቁብ መንፈሳዊና ታሪካዊ መጻሕፍትን በጋራ መረዳዳት ወደ ግል ቤተ-መጻሕፍትዎ ለማስገባት የተዘጋጀ የተቀደሰ ማህበራዊ ሥርዓት ነው። አባላት በየተራ የገንዘብ ሳይሆን የቅድስት ሥላሴ መጽሐፍ መደብር የመጻሕፍት መግዣ ክሬዲት (Voucher) ይቀበላሉ።'
-        : 'Book Equb is a sacred community savings tradition created to build personal spiritual libraries together. Rather than cash payouts, members take turns receiving Holy Trinity Bookstore vouchers to purchase sacred books.',
+        ? 'የመጽሐፍ እቁብ መንፈሳዊና ታሪካዊ መጻሕፍትን በጋራ መረዳዳት ወደ ግል ቤተ-መጻሕፍትዎ ለማስገባት የተዘጋጀ የተቀደሰ ማህበራዊ ሥርዓት ነው። አባላት በየተራ የገንዘብ ሳይሆን የየኰኵሐ ሃይማኖት ሰንበት ት/ቤት የመጻሕፍት መግዣ ክሬዲት (Voucher) ይቀበላሉ።'
+        : 'Book Equb is a sacred community savings tradition created to build personal spiritual libraries together. Rather than cash payouts, members take turns receiving Kokoha Haymanot Sunday School Bookstore vouchers to purchase sacred books.',
     whatIsEqubGuarantee:
       language === 'am'
         ? 'ጥሬ ገንዘብ አይወጣም · ክሬዲቱ ለመጻሕፍት ብቻ ይውላል'
@@ -171,59 +164,61 @@ export const EqubPage: React.FC = () => {
   return (
     <div className="w-full bg-bg-primary text-text-primary min-h-screen flex flex-col pb-24">
       {/* ── Fixed Sticky Header ─────────────────────────────────────── */}
-      <header className="sticky top-0 z-40 bg-bg-primary/95 backdrop-blur-md border-b border-border-subtle px-4 pt-3 pb-3">
+      <header className="sticky top-0 z-40 bg-bg-primary/95 backdrop-blur-md border-b border-border-subtle px-4 pt-3 pb-2">
         <div className="flex items-center justify-between">
           {/* Title & Emblem */}
-          <div className="flex items-center gap-2.5">
-            <img
-              src="/app-logo.png"
-              alt="ኮከበ ሃይማኖት"
-              className="w-10 h-10 rounded-xl object-cover border border-brand-500/10 shadow-sm shrink-0"
-            />
-            <div>
-              <h1 className="font-bold text-[18px] leading-tight text-text-primary">{t.title}</h1>
-              <p className="text-[11px] text-text-secondary leading-none mt-0.5">{t.subtitle}</p>
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-lg overflow-hidden shrink-0 border border-border-subtle">
+              <img
+                src="/app-logo.png"
+                alt="የኰኵሐ ሃይማኖት ሰንበት ት/ቤት"
+                className="w-full h-full object-cover"
+              />
             </div>
+            <span className="text-[15px] font-bold text-text-primary">{t.title}</span>
           </div>
 
           {/* Action Cluster */}
           <div className="flex items-center gap-1.5">
             {/* Language Switch */}
             <button
-              onClick={handleLanguageToggle}
-              className="h-8 px-2.5 rounded-full bg-bg-card border border-border-subtle text-[11px] font-semibold text-text-secondary hover:text-text-primary transition-colors flex items-center gap-1 active:scale-95"
+              onClick={() => changeLanguage(language === 'am' ? 'en' : 'am')}
+              className="h-7 w-7 rounded-full bg-bg-card border border-border-subtle flex items-center justify-center active:scale-95 transition-all"
+              aria-label="Switch language"
             >
-              <span className={cn('font-bold', language === 'am' ? 'text-brand-500' : 'text-text-secondary')}>አማ</span>
-              <span className="text-text-muted">/</span>
-              <span className={cn('font-bold', language === 'en' ? 'text-brand-500' : 'text-text-secondary')}>EN</span>
+              <span className="text-[10px] font-extrabold text-brand-500">{language === 'am' ? 'EN' : 'አማ'}</span>
+            </button>
+
+            {/* Theme Toggle */}
+            <button
+              onClick={toggleTheme}
+              className="h-7 w-7 rounded-full bg-bg-card border border-border-subtle flex items-center justify-center active:scale-95 transition-all"
+              aria-label="Toggle theme"
+            >
+              {resolvedTheme === 'dark'
+                ? <Icon name="Sun" size={13} className="text-amber-400" />
+                : <Icon name="Moon" size={13} className="text-brand-500" />
+              }
             </button>
 
             {/* Search */}
             <button
               aria-label="Search"
               onClick={() => setSearchOpen((prev) => !prev)}
-              className="w-9 h-9 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-bg-secondary transition-colors active:scale-95"
+              className="h-7 w-7 rounded-full bg-bg-card border border-border-subtle flex items-center justify-center active:scale-95 transition-transform"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <circle cx="11" cy="11" r="8" /><path d="m21 21-4.35-4.35" />
-              </svg>
+              <Icon name="Search" size={13} />
             </button>
 
             {/* Notifications */}
             <button
               aria-label="Notifications"
-              className="w-9 h-9 rounded-full flex items-center justify-center text-text-secondary hover:text-text-primary hover:bg-bg-secondary transition-colors relative active:scale-95"
+              onClick={() => setNotifOpen(true)}
+              className="relative h-7 w-7 rounded-full bg-bg-card border border-border-subtle flex items-center justify-center active:scale-95 transition-transform"
             >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" /><path d="M13.73 21a2 2 0 0 1-3.46 0" />
-              </svg>
-              <span className="absolute top-2 right-2 w-2 h-2 rounded-full bg-brand-500 ring-2 ring-bg-card" />
+              <Icon name="Bell" size={13} />
+              <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-[#E5484D]" />
             </button>
-
-            {/* Profile Avatar */}
-            <div className="ml-0.5">
-              <Avatar name={displayName} src={user?.photo_url} size="sm" />
-            </div>
           </div>
         </div>
 
@@ -665,6 +660,9 @@ export const EqubPage: React.FC = () => {
           </span>
         </div>
       )}
+
+      {/* ── Notification Panel ───────────────────────────────────── */}
+      <NotificationPanel open={notifOpen} onClose={() => setNotifOpen(false)} unreadCount={2} />
     </div>
   );
 };

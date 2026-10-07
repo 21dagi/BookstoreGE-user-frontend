@@ -20,12 +20,12 @@ export const FeaturedCarousel: React.FC<FeaturedCarouselProps> = ({
 
   if (isLoading) {
     return (
-      <section className="pt-5 pb-3 px-5">
-        <div className="flex items-center justify-between mb-3">
-          <Skeleton width={120} height={22} className="rounded" />
-          <Skeleton width={70} height={16} className="rounded" />
+      <section className="pt-3 pb-2 px-4">
+        <div className="flex items-center justify-between mb-2">
+          <Skeleton width={110} height={20} className="rounded" />
+          <Skeleton width={60} height={14} className="rounded" />
         </div>
-        <Skeleton height={200} className="rounded-3xl" />
+        <Skeleton height={170} className="rounded-2xl" />
       </section>
     );
   }
@@ -37,12 +37,12 @@ export const FeaturedCarousel: React.FC<FeaturedCarouselProps> = ({
   const newEditionLabel = language === 'am' ? 'አዲስ እትም' : 'New Edition';
 
   return (
-    <section className="pt-5 pb-3">
-      <div className="px-5 flex items-center justify-between mb-3">
-        <h2 className="text-[18px] font-bold text-text-primary">{sectionTitle}</h2>
+    <section className="pt-3 pb-2">
+      <div className="px-4 flex items-center justify-between mb-2">
+        <h2 className="text-[16px] font-bold text-text-primary">{sectionTitle}</h2>
         <Link
           to={ROUTES.CATALOG.ROOT}
-          className="text-[13px] font-semibold text-accent-500 hover:text-brand-500 transition-colors"
+          className="text-[12px] font-semibold text-accent-500 hover:text-brand-500 transition-colors"
         >
           {seeAllLabel}
         </Link>
@@ -50,10 +50,10 @@ export const FeaturedCarousel: React.FC<FeaturedCarouselProps> = ({
 
       {/* Peek carousel */}
       <div
-        className="flex gap-4 overflow-x-auto px-5 no-scrollbar snap-x snap-mandatory"
+        className="flex gap-3 overflow-x-auto px-4 no-scrollbar snap-x snap-mandatory"
         onScroll={(e) => {
           const el = e.currentTarget;
-          const idx = Math.round(el.scrollLeft / (el.clientWidth * 0.75));
+          const idx = Math.round(el.scrollLeft / (el.clientWidth * 0.72));
           setActiveIndex(Math.min(idx, books.length - 1));
         }}
       >
@@ -62,10 +62,8 @@ export const FeaturedCarousel: React.FC<FeaturedCarouselProps> = ({
             key={book.id}
             to={ROUTES.CATALOG.DETAIL(book.id)}
             className={cn(
-              'shrink-0 snap-center rounded-3xl overflow-hidden relative shadow-md bg-bg-secondary',
-              i === 0 || i === books.length - 1
-                ? 'w-[275px] aspect-[16/11]'
-                : 'w-[275px] aspect-[16/11]',
+              'shrink-0 snap-center rounded-2xl overflow-hidden relative shadow-md bg-bg-secondary',
+              'w-[250px]',
               i !== activeIndex && 'opacity-90',
             )}
             style={{ aspectRatio: '16/11' }}
