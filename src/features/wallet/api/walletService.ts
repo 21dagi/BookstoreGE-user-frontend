@@ -7,4 +7,5 @@ export const realWalletService: WalletService = {
     apiClient.get('/wallet/transactions', { params: category ? { category } : undefined }),
   getPendingDeposits: () => apiClient.get('/wallet/deposits/pending'),
   getPaymentAccounts: () => apiClient.get('/wallet/payment-accounts'),
+  deductBalance: (amount, tx) => apiClient.post('/wallet/deduct', { amount, tx }),
 };

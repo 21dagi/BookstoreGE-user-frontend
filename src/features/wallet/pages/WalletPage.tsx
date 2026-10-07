@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/shared/i18n';
+import { ROUTES } from '@/shared/constants';
 import { ErrorState } from '@/shared/ui/ErrorState';
 import { cn } from '@/shared/lib';
 import { Icon } from '@/shared/ui/Icon';
@@ -9,7 +11,6 @@ import {
   useWalletBalanceQuery,
   useWalletTransactionsQuery,
   usePendingDepositsQuery,
-  usePaymentAccountsQuery,
 } from '@/features/wallet/api';
 import { TransactionCategory, WalletTransaction } from '@/features/wallet/types';
 
@@ -87,32 +88,22 @@ const TxDetailModal: React.FC<{ state: TxModalState; onClose: () => void; langua
 // ─── Page ──────────────────────────────────────────────────────────────────────
 
 const WalletPage: React.FC = () => {
+  const navigate = useNavigate();
   const { language, changeLanguage } = useLanguage();
   const { resolvedTheme, toggleTheme } = useThemeStore();
 
-  const [depositPanelOpen, setDepositPanelOpen] = useState(false);
   const [activeFilter, setActiveFilter] = useState<TransactionCategory | undefined>(undefined);
   const [txModal, setTxModal] = useState<TxModalState>({ open: false, tx: null });
-  const [copiedId, setCopiedId] = useState<string | null>(null);
   const [notifOpen, setNotifOpen] = useState(false);
 
   const balance = useWalletBalanceQuery();
   const transactions = useWalletTransactionsQuery(activeFilter);
   const pending = usePendingDepositsQuery();
-  const accounts = usePaymentAccountsQuery();
 
   const isLoading = balance.isLoading || transactions.isLoading;
   const hasError = balance.isError || transactions.isError;
 
   const refetchAll = () => { balance.refetch(); transactions.refetch(); pending.refetch(); };
-
-  const handleCopy = async (text: string, id: string) => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedId(id);
-      setTimeout(() => setCopiedId(null), 2000);
-    } catch { /* no-op */ }
-  };
 
   const getCategoryIcon = (category: TransactionCategory, sign: 'credit' | 'debit') => {
     if (category === 'purchase') return { icon: '📖', bg: 'bg-rose-50 border-rose-100 dark:bg-rose-900/20 dark:border-rose-800/30' };
@@ -129,7 +120,7 @@ const WalletPage: React.FC = () => {
   const t = {
     walletTitle: language === 'am' ? 'ቦርሳ' : 'Wallet',
     balanceLabel: language === 'am' ? 'የእርስዎ ቀሪ ሒሳብ' : 'Your Balance',
-    deposit: language === 'am' ? '+ አስገባ' : '+ Deposit',
+    deposit: language === 'am' ? 'አስገባ' : 'Deposit',
     viewDetails: language === 'am' ? 'ዝርዝር' : 'Details',
     pendingTitle: language === 'am' ? 'ተቀማጭ ማረጋገጫ ላይ' : 'Pending Deposit',
     pendingBadge: language === 'am' ? 'በጥበቃ' : 'Pending',
@@ -241,84 +232,21 @@ const WalletPage: React.FC = () => {
 
           <div className="grid grid-cols-2 gap-2">
             <button
-              onClick={() => setDepositPanelOpen((v) => !v)}
-              className="h-9 px-3 rounded-xl bg-[#5c0b1c] hover:bg-[#7a2330] text-white font-bold text-[12px] flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.98] transition-all"
+              onClick={() => navigate(ROUTES.WALLET.DEPOSIT)}
+              className="h-9 px-3 rounded-xl bg-[#5c0b1c] hover:bg-[#7a2330] text-white font-bold text-[12px] flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.98] transition-all cursor-pointer"
             >
               <Icon name="Plus" size={15} />
               <span>{t.deposit}</span>
             </button>
-            <button className="h-9 px-3 rounded-xl bg-bg-secondary hover:bg-bg-card text-text-primary font-semibold text-[12px] flex items-center justify-center gap-1.5 active:scale-[0.98] transition-all border border-border-subtle">
+            <button
+              onClick={() => setActiveFilter(undefined)}
+              className="h-9 px-3 rounded-xl bg-bg-secondary hover:bg-bg-card text-text-primary font-semibold text-[12px] flex items-center justify-center gap-1.5 active:scale-[0.98] transition-all border border-border-subtle cursor-pointer"
+            >
               <Icon name="FileText" size={15} className="text-text-muted" />
               <span>{t.viewDetails}</span>
             </button>
           </div>
         </section>
-
-        {/* ── Deposit Panel ─────────────────────────────────── */}
-        {depositPanelOpen && (
-          <section className="bg-bg-card rounded-2xl p-4 border border-border-subtle shadow-card flex flex-col gap-3">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Icon name="CreditCard" size={18} className="text-[#5c0b1c]" />
-                <h2 className="text-[14px] font-bold text-text-primary">{t.depositPanelTitle}</h2>
-              </div>
-              <button
-                onClick={() => setDepositPanelOpen(false)}
-                className="w-6 h-6 rounded-full bg-bg-secondary flex items-center justify-center text-text-muted hover:text-text-primary"
-              >
-                <Icon name="X" size={14} />
-              </button>
-            </div>
-            <p className="text-[11px] text-text-secondary leading-relaxed">{t.depositInstruction}</p>
-
-            <div className="flex flex-col gap-2">
-              {(accounts.data ?? []).map((acc) => (
-                <div key={acc.id} className="flex items-center justify-between p-2.5 rounded-xl bg-bg-secondary border border-border-subtle">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <div className={cn(
-                      'w-7 h-7 rounded-lg font-bold flex items-center justify-center text-[10px] shrink-0',
-                      acc.id === 'telebirr' && 'bg-orange-100/70 dark:bg-orange-900/20 text-[#5c0b1c]',
-                      acc.id === 'cbe' && 'bg-amber-100 dark:bg-amber-900/20 text-[#B2782A]',
-                      acc.id === 'boa' && 'bg-rose-100 dark:bg-rose-900/20 text-[#821D30]',
-                    )}>
-                      {acc.id === 'telebirr' ? 'TB' : acc.id === 'cbe' ? 'CBE' : 'BOA'}
-                    </div>
-                    <div className="flex flex-col min-w-0">
-                      <span className="text-[12px] font-bold text-text-primary">{language === 'am' ? acc.labelAm : acc.labelEn}</span>
-                      <span className="text-[10.5px] font-mono text-text-secondary">{acc.accountNumber}</span>
-                    </div>
-                  </div>
-                  <button
-                    onClick={() => handleCopy(acc.shortCode, acc.id)}
-                    className="px-2 py-1 rounded-lg bg-bg-primary border border-border-subtle text-text-primary flex items-center gap-1 text-[10px] font-medium hover:bg-bg-secondary transition-colors shrink-0"
-                  >
-                    {copiedId === acc.id ? (
-                      <>
-                        <Icon name="Check" size={12} className="text-emerald-600" />
-                        <span className="text-emerald-600">{t.copied}</span>
-                      </>
-                    ) : (
-                      <>
-                        <Icon name="Copy" size={12} />
-                        <span>{t.copy}</span>
-                      </>
-                    )}
-                  </button>
-                </div>
-              ))}
-            </div>
-
-            <div className="h-20 rounded-xl border-2 border-dashed border-border-strong/50 bg-bg-secondary flex flex-col items-center justify-center gap-1 cursor-pointer hover:bg-bg-card transition-colors">
-              <Icon name="Image" size={22} className="text-text-muted" />
-              <span className="text-[11px] font-semibold text-text-secondary">{t.receiptUpload}</span>
-            </div>
-
-            <button className="h-10 w-full bg-[#5c0b1c] hover:bg-[#7a2330] text-white rounded-xl text-[12px] font-bold flex items-center justify-center gap-1.5 shadow-sm active:scale-[0.98] transition-all">
-              <Icon name="Upload" size={16} />
-              <span>{t.submitReceipt}</span>
-            </button>
-          </section>
-        )}
 
         {/* ── Pending Deposit ───────────────────────────────── */}
         {(pending.data ?? []).length > 0 && (

@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/shared/constants';
 import { walletServiceFactory } from './walletServiceFactory';
 import { TransactionCategory } from '../types';
@@ -32,5 +32,21 @@ export function usePaymentAccountsQuery() {
     queryKey: [...QUERY_KEYS.wallet.all, 'payment-accounts'] as const,
     queryFn: () => walletServiceFactory.get().getPaymentAccounts(),
     staleTime: 30 * 60_000,
+  });
+}
+
+export function useDeductWalletBalanceMutation() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      amount,
+      tx,
+    }: {
+      amount: number;
+      tx: { titleAm: string; titleEn: string; reference?: string };
+    }) => walletServiceFactory.get().deductBalance(amount, tx),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.wallet.all });
+    },
   });
 }

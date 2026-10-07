@@ -3,12 +3,13 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useLanguage } from '@/shared/i18n';
 import { ROUTES } from '@/shared/constants';
 import { Icon } from '@/shared/ui/Icon';
-import { Badge } from '@/shared/ui/Badge';
 import { Skeleton } from '@/shared/ui/Skeleton';
 import { ErrorState } from '@/shared/ui/ErrorState';
 import { toast } from '@/shared/ui/Toast';
 import { BackButton } from '@/shared/components/navigation/BackButton';
 import { useBookQuery, useTrendingBooksQuery, useToggleSavedMutation } from '@/features/catalog/api';
+import { useCartStore } from '@/features/cart/store/cartStore';
+import { useWalletBalanceQuery, useDeductWalletBalanceMutation } from '@/features/wallet/api';
 import { BookCard } from '@/features/home/components/BookCard';
 import { cn } from '@/shared/lib';
 
@@ -20,6 +21,16 @@ export const ProductDetailPage: React.FC = () => {
   const [quantity, setQuantity] = useState(1);
   const [descExpanded, setDescExpanded] = useState(false);
   const [addedAnim, setAddedAnim] = useState(false);
+  const [purchaseSheetOpen, setPurchaseSheetOpen] = useState(false);
+  const [purchaseSuccessModalOpen, setPurchaseSuccessModalOpen] = useState(false);
+  const [purchasedOrderRef, setPurchasedOrderRef] = useState('');
+
+  const addItem = useCartStore((s) => s.addItem);
+  const cartItems = useCartStore((s) => s.items);
+  const cartCount = cartItems.reduce((sum, item) => sum + item.quantity, 0);
+
+  const balanceQuery = useWalletBalanceQuery();
+  const deductMutation = useDeductWalletBalanceMutation();
 
   const { data: book, isLoading, isError, refetch } = useBookQuery(bookId ?? '');
   const { data: relatedBooks } = useTrendingBooksQuery();
@@ -45,18 +56,46 @@ export const ProductDetailPage: React.FC = () => {
   };
 
   const handleAddToCart = () => {
+    if (!book) return;
+    addItem(book, quantity);
     setAddedAnim(true);
     setTimeout(() => setAddedAnim(false), 1200);
     toast.success(
       language === 'am'
-        ? `${quantity}x ${book?.title.am} ወደ ጋሪ ተጨምሯል!`
-        : `${quantity}x ${book?.title.en} added to cart!`,
+        ? `${quantity}x ${book.title.am} ወደ ጋሪ ተጨምሯል!`
+        : `${quantity}x ${book.title.en} added to cart!`,
     );
   };
 
   const handleBuyNow = () => {
-    handleAddToCart();
-    navigate(ROUTES.CART.ROOT);
+    setPurchaseSheetOpen(true);
+  };
+
+  const handleConfirmPurchase = async () => {
+    if (!book) return;
+    const orderTotal = book.price * quantity;
+    const currentBalance = balanceQuery.data?.totalBalance ?? 0;
+    if (currentBalance < orderTotal) {
+      toast.error(language === 'am' ? 'ቀሪ ሒሳብዎ በቂ አይደለም' : 'Insufficient balance');
+      return;
+    }
+
+    const orderRef = `#ORD-${Math.floor(100000 + Math.random() * 900000)}`;
+    try {
+      await deductMutation.mutateAsync({
+        amount: orderTotal,
+        tx: {
+          titleAm: `የመጽሐፍ ግዢ · ${book.title.am} (${quantity}x)`,
+          titleEn: `Book Purchase · ${book.title.en} (${quantity}x)`,
+          reference: orderRef,
+        },
+      });
+      setPurchasedOrderRef(orderRef);
+      setPurchaseSheetOpen(false);
+      setPurchaseSuccessModalOpen(true);
+    } catch {
+      toast.error(language === 'am' ? 'ክፍያው አልተሳካም፤ እባክዎ እንደገና ይሞክሩ' : 'Payment failed, please try again');
+    }
   };
 
   if (isLoading) {
@@ -172,7 +211,11 @@ export const ProductDetailPage: React.FC = () => {
               aria-label="Cart"
             >
               <Icon name="ShoppingBag" size={17} />
-              <Badge size="dot" variant="danger" className="absolute top-2 right-2" />
+              {cartCount > 0 && (
+                <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 rounded-full bg-[#5c0b1c] text-white text-[10px] font-extrabold flex items-center justify-center shadow-sm">
+                  {cartCount}
+                </span>
+              )}
             </Link>
           </div>
         </div>
@@ -432,6 +475,201 @@ export const ProductDetailPage: React.FC = () => {
           </div>
         </div>
       </footer>
+
+      {/* ── Purchase Confirmation Bottom Sheet ─────────────────────── */}
+      {purchaseSheetOpen && (
+        <div
+          className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-end justify-center p-0"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setPurchaseSheetOpen(false);
+          }}
+        >
+          <div className="bg-bg-primary rounded-t-3xl w-full max-w-lg p-5 shadow-2xl flex flex-col gap-4 border-t border-border-subtle animate-slide-up">
+            <div className="flex items-center justify-between pb-1 border-b border-border-subtle/50">
+              <span className="text-[14px] font-extrabold text-text-primary">
+                {language === 'am' ? 'የግዢ ማረጋገጫ' : 'Confirm Purchase'}
+              </span>
+              <button
+                type="button"
+                onClick={() => setPurchaseSheetOpen(false)}
+                className="w-8 h-8 rounded-full bg-bg-secondary flex items-center justify-center text-text-muted hover:text-text-primary"
+              >
+                <Icon name="X" size={16} />
+              </button>
+            </div>
+
+            {/* Book Info Summary */}
+            <div className="flex items-center gap-3 p-3 bg-bg-secondary rounded-2xl border border-border-subtle">
+              <div className="w-14 h-16 rounded-xl overflow-hidden bg-bg-card border border-border-subtle shrink-0">
+                {book.coverUrl ? (
+                  <img src={book.coverUrl} alt={book.title[language]} className="w-full h-full object-cover" />
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center text-text-muted">
+                    <Icon name="Book" size={20} />
+                  </div>
+                )}
+              </div>
+              <div className="flex flex-col min-w-0">
+                <h4 className="text-[13px] font-bold text-text-primary truncate">{book.title[language]}</h4>
+                <span className="text-[11px] text-text-muted">{book.author[language]}</span>
+                <span className="text-[12px] font-extrabold text-[#7a2330] dark:text-[#E8886E] mt-0.5">
+                  {quantity} × {book.price.toLocaleString()} = {totalPrice.toLocaleString()} {language === 'am' ? 'ብር' : 'ETB'}
+                </span>
+              </div>
+            </div>
+
+            {/* Wallet Calculation */}
+            <div className="p-3.5 rounded-2xl bg-bg-secondary flex flex-col gap-2 text-[12.5px]">
+              <div className="flex justify-between">
+                <span className="text-text-muted">{language === 'am' ? 'የቦርሳዎ ቀሪ ሒሳብ' : 'Current Balance'}</span>
+                <span className="text-text-primary font-mono font-bold">
+                  {(balanceQuery.data?.totalBalance ?? 0).toLocaleString()} {language === 'am' ? 'ብር' : 'ETB'}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-text-muted">{language === 'am' ? 'የሚቀነስ ክፍያ' : 'Deduction'}</span>
+                <span className="text-rose-600 font-mono font-bold">
+                  -{totalPrice.toLocaleString()} {language === 'am' ? 'ብር' : 'ETB'}
+                </span>
+              </div>
+              <div className="flex justify-between pt-2 border-t border-border-subtle/50">
+                <span className="text-text-muted">{language === 'am' ? 'ከክፍያ በኋላ የሚቀር' : 'Remaining Balance'}</span>
+                <span
+                  className={cn(
+                    'font-mono font-extrabold',
+                    (balanceQuery.data?.totalBalance ?? 0) >= totalPrice
+                      ? 'text-emerald-600 dark:text-emerald-400'
+                      : 'text-rose-600'
+                  )}
+                >
+                  {((balanceQuery.data?.totalBalance ?? 0) - totalPrice).toLocaleString()}{' '}
+                  {language === 'am' ? 'ብር' : 'ETB'}
+                </span>
+              </div>
+            </div>
+
+            {(balanceQuery.data?.totalBalance ?? 0) < totalPrice && (
+              <div className="p-3 rounded-xl bg-rose-50 dark:bg-rose-950/40 border border-rose-200 dark:border-rose-900/40 flex items-center justify-between">
+                <span className="text-[12px] font-bold text-rose-700 dark:text-rose-300">
+                  {language === 'am' ? 'ቀሪ ሒሳብዎ በቂ አይደለም' : 'Insufficient wallet balance'}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPurchaseSheetOpen(false);
+                    navigate(ROUTES.WALLET.DEPOSIT);
+                  }}
+                  className="px-3 py-1 rounded-lg bg-[#5c0b1c] text-white text-[11px] font-bold shadow-sm"
+                >
+                  {language === 'am' ? 'ገንዘብ አስገባ' : 'Deposit'}
+                </button>
+              </div>
+            )}
+
+            <div className="flex items-center gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => setPurchaseSheetOpen(false)}
+                className="h-11 flex-1 rounded-2xl bg-bg-secondary hover:bg-bg-card border border-border-subtle text-text-primary font-semibold text-[13px] active:scale-[0.98] transition-all"
+              >
+                {language === 'am' ? 'ይቅር' : 'Cancel'}
+              </button>
+
+              <button
+                type="button"
+                disabled={
+                  (balanceQuery.data?.totalBalance ?? 0) < totalPrice || deductMutation.isPending
+                }
+                onClick={handleConfirmPurchase}
+                className={cn(
+                  'h-11 flex-[2] rounded-2xl font-extrabold text-[13px] flex items-center justify-center gap-2 shadow-md transition-all active:scale-[0.98]',
+                  (balanceQuery.data?.totalBalance ?? 0) >= totalPrice && !deductMutation.isPending
+                    ? 'bg-[#5c0b1c] hover:bg-[#7a2330] text-white shadow-[#5c0b1c]/25 cursor-pointer'
+                    : 'bg-bg-secondary text-text-muted border border-border-subtle cursor-not-allowed opacity-60'
+                )}
+              >
+                {deductMutation.isPending ? (
+                  <Icon name="Loader2" size={17} className="animate-spin" />
+                ) : (
+                  <Icon name="Check" size={17} />
+                )}
+                <span>{language === 'am' ? 'አረጋግጥና ክፈል' : 'Confirm & Pay'}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ── Success Modal ─────────────────────────────────────────────── */}
+      {purchaseSuccessModalOpen && (
+        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-bg-card border border-border-subtle rounded-3xl w-full max-w-sm p-6 shadow-2xl flex flex-col items-center text-center gap-4 animate-scale-up">
+            <div className="w-16 h-16 rounded-full bg-emerald-50 dark:bg-emerald-950/50 border-2 border-emerald-500 flex items-center justify-center text-emerald-600 dark:text-emerald-400">
+              <Icon name="Check" size={32} />
+            </div>
+
+            <div className="flex flex-col gap-1">
+              <h2 className="text-[17px] font-black text-text-primary leading-tight">
+                {language === 'am' ? 'ግዢዎ በተሳካ ሁኔታ ተጠናቋል!' : 'Purchase Successful!'}
+              </h2>
+              <p className="text-[12px] text-text-muted leading-relaxed mt-1">
+                {language === 'am'
+                  ? 'ክፍያው ከቦርሳዎ ተቀንሷል። እቃውን በሰንበት ት/ቤቱ መደብር መውሰድ ይችላሉ።'
+                  : 'Payment was deducted from your wallet. You can pick up your book at the store.'}
+              </p>
+            </div>
+
+            <div className="w-full bg-bg-secondary rounded-2xl p-3 border border-border-subtle flex flex-col gap-2 text-[12px]">
+              <div className="flex justify-between">
+                <span className="text-text-muted">ማጣቀሻ / Reference</span>
+                <span className="text-text-primary font-mono font-bold">{purchasedOrderRef}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-text-muted">የተከፈለ / Paid</span>
+                <span className="text-[#5c0b1c] dark:text-rose-400 font-extrabold">
+                  {totalPrice.toLocaleString()} {language === 'am' ? 'ብር' : 'ETB'}
+                </span>
+              </div>
+            </div>
+
+            <div className="flex flex-col w-full gap-2 pt-1">
+              <button
+                type="button"
+                onClick={() => {
+                  setPurchaseSuccessModalOpen(false);
+                  navigate(ROUTES.CATALOG.ROOT);
+                }}
+                className="h-11 w-full bg-[#5c0b1c] hover:bg-[#7a2330] text-white rounded-2xl text-[13px] font-extrabold shadow-md active:scale-[0.98] transition-all"
+              >
+                {language === 'am' ? 'ወደ መደብር ተመለስ' : 'Back to Store'}
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  setPurchaseSuccessModalOpen(false);
+                  navigate(ROUTES.WALLET.ROOT);
+                }}
+                className="h-10 w-full bg-bg-secondary hover:bg-bg-card text-text-primary border border-border-subtle rounded-2xl text-[12px] font-bold active:scale-[0.98] transition-all"
+              >
+                {language === 'am' ? 'የቦርሳ ታሪክ እይ' : 'View Wallet'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <style>{`
+        @keyframes slide-up {
+          from { transform: translateY(100%); }
+          to { transform: translateY(0); }
+        }
+        .animate-slide-up { animation: slide-up 0.26s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes scale-up {
+          from { opacity: 0; transform: scale(0.92); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        .animate-scale-up { animation: scale-up 0.24s cubic-bezier(0.16, 1, 0.3, 1); }
+      `}</style>
     </div>
   );
 };

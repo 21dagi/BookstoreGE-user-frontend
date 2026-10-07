@@ -7,7 +7,7 @@ import { NotificationPanel } from '@/shared/components/display/NotificationPanel
 
 // ─── Mock News Data ──────────────────────────────────────────────────────────
 
-interface NewsArticle {
+export interface NewsArticle {
   id: string;
   category: string;
   categoryColor: string;
@@ -79,21 +79,25 @@ interface NewsCardProps {
   article: NewsArticle;
   language: 'am' | 'en';
   featured?: boolean;
+  onOpenDetail?: (article: NewsArticle) => void;
 }
 
-const NewsCard: React.FC<NewsCardProps> = ({ article, language, featured = false }) => {
+const NewsCard: React.FC<NewsCardProps> = ({ article, language, featured = false, onOpenDetail }) => {
   const [expanded, setExpanded] = useState(false);
   const [activeImg, setActiveImg] = useState(0);
 
   if (featured && article.images.length > 0) {
     // Hero card — full-bleed image with gradient
     return (
-      <article className="relative rounded-2xl overflow-hidden shadow-lg border border-border-subtle mb-4">
-        <div className="relative aspect-[16/9]">
+      <article className="relative rounded-2xl overflow-hidden shadow-lg border border-border-subtle mb-4 group">
+        <div
+          onClick={() => onOpenDetail?.(article)}
+          className="relative aspect-[16/9] cursor-pointer"
+        >
           <img
             src={article.images[0]}
             alt={article.title[language]}
-            className="w-full h-full object-cover"
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-102"
             loading="eager"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent" />
@@ -130,15 +134,24 @@ const NewsCard: React.FC<NewsCardProps> = ({ article, language, featured = false
             <span>·</span>
             <span>{article.readTime} {language === 'am' ? 'ደቂቃ ያነብቡ' : 'min read'}</span>
           </div>
-          <button
-            onClick={() => setExpanded((v) => !v)}
-            className="text-[11px] font-bold text-[#7a2330] flex items-center gap-1"
-          >
-            {expanded
-              ? (language === 'am' ? 'አሳጥር' : 'Show less')
-              : (language === 'am' ? 'ተጨማሪ አንብብ' : 'Read more')}
-            <Icon name={expanded ? 'ChevronUp' : 'ChevronDown'} size={12} />
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => onOpenDetail?.(article)}
+              className="h-7 px-2.5 rounded-lg bg-bg-secondary hover:bg-bg-card border border-border-subtle text-text-primary text-[11px] font-bold flex items-center gap-1 active:scale-95 transition-all"
+            >
+              <Icon name="FileText" size={12} className="text-brand-500" />
+              <span>{language === 'am' ? 'ሙሉ ዝርዝር' : 'Details'}</span>
+            </button>
+            <button
+              onClick={() => setExpanded((v) => !v)}
+              className="text-[11px] font-bold text-[#7a2330] dark:text-[#E8886E] flex items-center gap-1"
+            >
+              {expanded
+                ? (language === 'am' ? 'አሳጥር' : 'Show less')
+                : (language === 'am' ? 'ተጨማሪ' : 'Read more')}
+              <Icon name={expanded ? 'ChevronUp' : 'ChevronDown'} size={12} />
+            </button>
+          </div>
         </div>
       </article>
     );
@@ -156,8 +169,9 @@ const NewsCard: React.FC<NewsCardProps> = ({ article, language, featured = false
           <img
             src={article.images[activeImg]}
             alt={article.title[language]}
-            className="w-full h-full object-cover transition-opacity duration-300"
+            className="w-full h-full object-cover transition-opacity duration-300 cursor-pointer"
             loading="lazy"
+            onClick={() => onOpenDetail?.(article)}
           />
           {article.images.length > 1 && (
             <>
@@ -203,7 +217,10 @@ const NewsCard: React.FC<NewsCardProps> = ({ article, language, featured = false
         </div>
 
         {/* Title */}
-        <h3 className="font-bold text-[14px] text-text-primary leading-snug mb-1">
+        <h3
+          onClick={() => onOpenDetail?.(article)}
+          className="font-bold text-[14px] text-text-primary leading-snug mb-1 cursor-pointer hover:text-brand-500 transition-colors"
+        >
           {article.title[language]}
         </h3>
 
@@ -216,23 +233,34 @@ const NewsCard: React.FC<NewsCardProps> = ({ article, language, featured = false
         </p>
 
         {/* Footer */}
-        <div className="flex items-center justify-between mt-3">
+        <div className="flex items-center justify-between mt-3 pt-2 border-t border-border-subtle/50">
           <div className="flex items-center gap-1.5 text-text-muted text-[10px]">
             <div className="w-5 h-5 rounded-full bg-bg-secondary flex items-center justify-center">
               <Icon name="User" size={11} />
             </div>
             <span>{article.author}</span>
           </div>
-          <button
-            onClick={() => setExpanded((v) => !v)}
-            className="flex items-center gap-1 text-[11px] font-bold transition-colors"
-            style={{ color: article.categoryColor }}
-          >
-            {expanded
-              ? (language === 'am' ? 'አሳጥር' : 'Show less')
-              : (language === 'am' ? 'ተጨማሪ' : 'Read more')}
-            <Icon name={expanded ? 'ChevronUp' : 'ChevronDown'} size={12} />
-          </button>
+
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => onOpenDetail?.(article)}
+              className="h-6 px-2 rounded-lg bg-bg-secondary hover:bg-bg-card border border-border-subtle text-text-primary text-[10.5px] font-semibold flex items-center gap-1 active:scale-95 transition-all"
+            >
+              <Icon name="FileText" size={11} className="text-brand-500" />
+              <span>{language === 'am' ? 'ዝርዝር' : 'Details'}</span>
+            </button>
+
+            <button
+              onClick={() => setExpanded((v) => !v)}
+              className="flex items-center gap-1 text-[11px] font-bold transition-colors"
+              style={{ color: article.categoryColor }}
+            >
+              {expanded
+                ? (language === 'am' ? 'አሳጥር' : 'Show less')
+                : (language === 'am' ? 'ተጨማሪ' : 'Read more')}
+              <Icon name={expanded ? 'ChevronUp' : 'ChevronDown'} size={12} />
+            </button>
+          </div>
         </div>
       </div>
     </article>
@@ -246,6 +274,7 @@ const NewsPage: React.FC = () => {
   const { resolvedTheme, toggleTheme } = useThemeStore();
   const [notifOpen, setNotifOpen] = useState(false);
   const [activeCategory, setActiveCategory] = useState('all');
+  const [selectedArticle, setSelectedArticle] = useState<NewsArticle | null>(null);
 
   const categories = ['all', ...Array.from(new Set(MOCK_NEWS.map((n) => n.category)))];
 
@@ -258,6 +287,10 @@ const NewsPage: React.FC = () => {
 
   const pageTitle = language === 'am' ? 'ዜናዎች' : 'News';
   const allLabel = language === 'am' ? 'ሁሉም' : 'All';
+
+  const relatedArticles = selectedArticle
+    ? MOCK_NEWS.filter((n) => n.id !== selectedArticle.id)
+    : [];
 
   return (
     <div className="w-full bg-bg-primary text-text-primary min-h-screen flex flex-col pb-24">
@@ -332,12 +365,22 @@ const NewsPage: React.FC = () => {
       <main className="flex-1 px-4 pt-3 pb-3 flex flex-col gap-3">
         {/* Pinned hero */}
         {pinnedArticle && (
-          <NewsCard article={pinnedArticle} language={language} featured />
+          <NewsCard
+            article={pinnedArticle}
+            language={language}
+            featured
+            onOpenDetail={(a) => setSelectedArticle(a)}
+          />
         )}
 
         {/* Regular cards */}
         {regularArticles.map((article) => (
-          <NewsCard key={article.id} article={article} language={language} />
+          <NewsCard
+            key={article.id}
+            article={article}
+            language={language}
+            onOpenDetail={(a) => setSelectedArticle(a)}
+          />
         ))}
 
         {filtered.length === 0 && (
@@ -348,7 +391,149 @@ const NewsPage: React.FC = () => {
         )}
       </main>
 
+      {/* ── Big News Article Detail Modal ─────────────────────────────── */}
+      {selectedArticle && (
+        <div
+          className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-end sm:items-center justify-center p-0 sm:p-4"
+          onClick={(e) => {
+            if (e.target === e.currentTarget) setSelectedArticle(null);
+          }}
+        >
+          <div className="bg-bg-primary rounded-t-3xl sm:rounded-3xl w-full max-w-lg max-h-[92vh] overflow-y-auto no-scrollbar shadow-2xl border border-border-subtle flex flex-col animate-slide-up sm:animate-scale-up">
+
+            {/* Sticky Modal Bar */}
+            <div className="sticky top-0 z-10 bg-bg-primary/95 backdrop-blur-md px-4 py-3 border-b border-border-subtle flex items-center justify-between">
+              <span
+                className="px-2.5 py-0.5 rounded-full text-[11px] font-bold text-white shadow-sm"
+                style={{ backgroundColor: selectedArticle.categoryColor }}
+              >
+                {selectedArticle.category}
+              </span>
+              <button
+                type="button"
+                onClick={() => setSelectedArticle(null)}
+                className="w-8 h-8 rounded-full bg-bg-secondary flex items-center justify-center text-text-muted hover:text-text-primary active:scale-95 transition-all"
+                aria-label="Close"
+              >
+                <Icon name="X" size={17} />
+              </button>
+            </div>
+
+            {/* Full Picture or Carousel */}
+            {selectedArticle.images.length > 0 && (
+              <div className="relative aspect-[16/10] bg-bg-secondary overflow-hidden shrink-0">
+                <img
+                  src={selectedArticle.images[0]}
+                  alt={selectedArticle.title[language]}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+            )}
+
+            {/* Modal Body */}
+            <div className="p-4 sm:p-5 flex flex-col gap-4">
+              {/* Metadata row */}
+              <div className="flex items-center justify-between text-[11.5px] text-text-muted">
+                <div className="flex items-center gap-1.5 font-medium">
+                  <Icon name="User" size={13} className="text-brand-500" />
+                  <span>{selectedArticle.author}</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <span>{selectedArticle.date}</span>
+                  <span>·</span>
+                  <div className="flex items-center gap-1">
+                    <Icon name="Clock" size={12} />
+                    <span>{selectedArticle.readTime} {language === 'am' ? 'ደቂቃ' : 'min'}</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Title */}
+              <h1 className="text-[19px] sm:text-[21px] font-black text-text-primary leading-snug">
+                {selectedArticle.title[language]}
+              </h1>
+
+              {/* Lead / Description */}
+              <p className="text-[13.5px] font-medium text-text-secondary leading-relaxed bg-bg-secondary/60 p-3 rounded-2xl border border-border-subtle/60">
+                {selectedArticle.description[language]}
+              </p>
+
+              {/* Full Content */}
+              <div className="text-[13.5px] text-text-primary leading-relaxed whitespace-pre-line flex flex-col gap-2">
+                {selectedArticle.fullContent[language]}
+              </div>
+
+              {/* ── Related News Section ─────────────────────────────── */}
+              {relatedArticles.length > 0 && (
+                <div className="pt-4 border-t border-border-subtle flex flex-col gap-3">
+                  <h3 className="text-[14px] font-bold text-text-primary">
+                    {language === 'am' ? 'ተዛማጅ ዜናዎች' : 'Related News'}
+                  </h3>
+
+                  <div className="flex flex-col gap-2.5">
+                    {relatedArticles.map((rel) => (
+                      <div
+                        key={rel.id}
+                        onClick={() => setSelectedArticle(rel)}
+                        className="p-2.5 rounded-2xl bg-bg-secondary hover:bg-bg-card border border-border-subtle flex items-center gap-3 cursor-pointer transition-all active:scale-[0.99]"
+                      >
+                        {rel.images.length > 0 ? (
+                          <div className="w-14 h-14 rounded-xl overflow-hidden bg-bg-card border border-border-subtle shrink-0">
+                            <img src={rel.images[0]} alt={rel.title[language]} className="w-full h-full object-cover" />
+                          </div>
+                        ) : (
+                          <div className="w-14 h-14 rounded-xl bg-bg-card border border-border-subtle flex items-center justify-center text-text-muted shrink-0">
+                            <Icon name="Newspaper" size={20} />
+                          </div>
+                        )}
+                        <div className="flex flex-col min-w-0 flex-1">
+                          <span
+                            className="text-[10px] font-bold w-fit px-1.5 py-0.2 rounded"
+                            style={{ color: rel.categoryColor }}
+                          >
+                            {rel.category}
+                          </span>
+                          <h4 className="text-[12.5px] font-bold text-text-primary truncate mt-0.5">
+                            {rel.title[language]}
+                          </h4>
+                          <span className="text-[10px] text-text-muted mt-0.5">
+                            {rel.date} · {rel.readTime} {language === 'am' ? 'ደቂቃ' : 'min'}
+                          </span>
+                        </div>
+                        <Icon name="ChevronRight" size={16} className="text-text-muted shrink-0" />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Close Action */}
+              <button
+                type="button"
+                onClick={() => setSelectedArticle(null)}
+                className="mt-2 h-11 w-full rounded-2xl bg-bg-secondary hover:bg-bg-card border border-border-subtle text-text-primary font-bold text-[13px] active:scale-[0.98] transition-all"
+              >
+                {language === 'am' ? 'ዝጋ' : 'Close'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <NotificationPanel open={notifOpen} onClose={() => setNotifOpen(false)} unreadCount={2} />
+
+      <style>{`
+        @keyframes slide-up {
+          from { transform: translateY(100%); }
+          to { transform: translateY(0); }
+        }
+        .animate-slide-up { animation: slide-up 0.28s cubic-bezier(0.16, 1, 0.3, 1); }
+        @keyframes scale-up {
+          from { opacity: 0; transform: scale(0.92); }
+          to { opacity: 1; transform: scale(1); }
+        }
+        .animate-scale-up { animation: scale-up 0.24s cubic-bezier(0.16, 1, 0.3, 1); }
+      `}</style>
     </div>
   );
 };

@@ -91,7 +91,7 @@ const MOCK_TRANSACTIONS = [
 ];
 
 export const mockWalletService: WalletService = {
-  getBalance: async () => { await delay(400); return MOCK_BALANCE; },
+  getBalance: async () => { await delay(400); return { ...MOCK_BALANCE }; },
   getTransactions: async (category) => {
     await delay(500);
     if (!category) return MOCK_TRANSACTIONS;
@@ -99,4 +99,29 @@ export const mockWalletService: WalletService = {
   },
   getPendingDeposits: async () => { await delay(300); return MOCK_PENDING_DEPOSITS; },
   getPaymentAccounts: async () => { await delay(200); return MOCK_ACCOUNTS; },
+  deductBalance: async (amount, tx) => {
+    await delay(350);
+    MOCK_BALANCE.totalBalance = Math.max(0, MOCK_BALANCE.totalBalance - amount);
+    const newTx = {
+      id: `tx-${Date.now()}`,
+      title: { am: tx.titleAm, en: tx.titleEn },
+      subtitle: { am: 'ተጠናቋል (በቦታው ለመውሰድ)', en: 'Completed (In-Store Pickup)' },
+      amount,
+      sign: 'debit' as const,
+      category: 'purchase' as const,
+      date: { am: 'ዛሬ', en: 'Today' },
+      status: { am: 'ተጠናቋል', en: 'Completed' },
+      description: {
+        am: `${tx.titleAm} ከመደብሩ በቦርሳ ቀሪ ሒሳብ ተገዝቷል።`,
+        en: `Purchased ${tx.titleEn} using store balance.`,
+      },
+      reference: tx.reference || `#ORD-${Math.floor(10000 + Math.random() * 90000)}`,
+    };
+    MOCK_TRANSACTIONS.unshift(newTx);
+    return {
+      success: true,
+      newBalance: MOCK_BALANCE.totalBalance,
+      transaction: newTx,
+    };
+  },
 };

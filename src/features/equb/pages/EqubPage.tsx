@@ -13,7 +13,7 @@ type EqubTab = 'my' | 'open';
 export const EqubPage: React.FC = () => {
   const { language, changeLanguage } = useLanguage();
 
-  const [activeTab, setActiveTab] = useState<EqubTab>('my');
+  const [activeTab, setActiveTab] = useState<EqubTab>('open');
   const [searchQuery, setSearchQuery] = useState('');
   const [searchOpen, setSearchOpen] = useState(false);
   const [paymentModalOpen, setPaymentModalOpen] = useState(false);
@@ -311,23 +311,23 @@ export const EqubPage: React.FC = () => {
                     </div>
 
                     {/* Progress Tracking */}
-                    <div className="bg-[#F5EFE6]/70 rounded-xl p-3.5 border border-[#EDE6DB]/60 flex flex-col gap-2">
+                    <div className="bg-bg-secondary rounded-xl p-3.5 border border-border-subtle flex flex-col gap-2">
                       <div className="flex justify-between items-center text-[12px]">
-                        <span className="text-[#63585B] font-medium">{t.roundProgress}</span>
-                        <span className="text-[#7A2330] font-bold">
+                        <span className="text-text-secondary font-medium">{t.roundProgress}</span>
+                        <span className="text-[#7A2330] dark:text-[#E8886E] font-bold">
                           {t.roundOf(myEqub.currentRound, myEqub.totalRounds)}
                         </span>
                       </div>
                       {/* Track */}
-                      <div className="w-full bg-[#E5DCD1] h-2 rounded-full overflow-hidden">
+                      <div className="w-full bg-border-subtle h-2 rounded-full overflow-hidden">
                         <div
                           className="bg-[#7A2330] h-full rounded-full transition-all duration-500"
                           style={{ width: `${myEqub.progressPercent}%` }}
                         />
                       </div>
-                      <div className="flex justify-between items-center text-[11px] text-[#968A8E]">
+                      <div className="flex justify-between items-center text-[11px] text-text-muted">
                         <span>{myEqub.startDate[language]}</span>
-                        <span className="text-[#63585B] font-medium">
+                        <span className="text-text-secondary font-medium">
                           {Math.round(myEqub.progressPercent)}% {t.completed}
                         </span>
                         <span>{myEqub.endDate[language]}</span>
@@ -335,7 +335,7 @@ export const EqubPage: React.FC = () => {
                     </div>
 
                     {/* Recipient Turn Highlight: Bookstore Purchasing Credit (NOT CASH) */}
-                    <div className="bg-[#FAF3F4] rounded-xl p-3.5 border border-[#5C0B1C]/15 flex items-start gap-3">
+                    <div className="bg-brand-50/50 dark:bg-brand-950/40 rounded-xl p-3.5 border border-[#5C0B1C]/20 flex items-start gap-3">
                       <div className="w-9 h-9 rounded-lg bg-[#7A2330] text-white flex items-center justify-center shrink-0 mt-0.5 shadow-sm">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                           <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
@@ -343,17 +343,17 @@ export const EqubPage: React.FC = () => {
                       </div>
                       <div className="min-w-0 flex-1">
                         <div className="flex items-center gap-1.5 flex-wrap">
-                          <span className="text-[14px] font-bold text-[#7A2330]">
+                          <span className="text-[14px] font-bold text-[#7A2330] dark:text-[#E8886E]">
                             {t.yourTurn(myEqub.userTurnRound)}
                           </span>
-                          <span className="text-[11px] px-2 py-0.5 bg-[#F9EDEF] rounded-md text-[#5C0B1C] font-medium border border-[#5C0B1C]/20">
+                          <span className="text-[11px] px-2 py-0.5 bg-bg-card rounded-md text-[#5C0B1C] dark:text-[#E8886E] font-medium border border-[#5C0B1C]/20">
                             {myEqub.userTurnMonth[language]}
                           </span>
                         </div>
-                        <p className="text-[12px] text-[#63585B] mt-1 leading-relaxed">
+                        <p className="text-[12px] text-text-secondary mt-1 leading-relaxed">
                           {t.turnDesc(myEqub.creditVoucherAmount)}
                         </p>
-                        <div className="inline-flex items-center gap-1.5 mt-2 text-[11px] font-medium text-[#63585B] bg-white/80 px-2 py-1 rounded-md border border-[#EDE6DB]">
+                        <div className="inline-flex items-center gap-1.5 mt-2 text-[11px] font-medium text-text-secondary bg-bg-card px-2 py-1 rounded-md border border-border-subtle">
                           <span className="text-emerald-700">🏪</span>
                           <span>{t.creditNotice}</span>
                         </div>
@@ -361,18 +361,18 @@ export const EqubPage: React.FC = () => {
                     </div>
 
                     {/* Contribution Due Section */}
-                    <div className="pt-2 border-t border-[#EDE6DB]/60 flex items-center justify-between gap-3">
+                    <div className="pt-2 border-t border-border-subtle flex items-center justify-between gap-3">
                       <div>
-                        <span className="text-[11px] font-medium text-[#968A8E] block leading-none">
+                        <span className="text-[11px] font-medium text-text-muted block leading-none">
                           {t.nextContribution}
                         </span>
                         <div className="flex items-baseline gap-1 mt-1">
-                          <span className="text-[22px] font-bold text-[#201A1C] tracking-tight">
+                          <span className="text-[22px] font-bold text-text-primary tracking-tight">
                             {myEqub.nextContributionAmount.toLocaleString()}
                           </span>
-                          <span className="text-[13px] font-semibold text-[#63585B]">{t.birr}</span>
+                          <span className="text-[13px] font-semibold text-text-secondary">{t.birr}</span>
                         </div>
-                        <span className="text-[11px] text-[#63585B] block mt-0.5 font-medium">
+                        <span className="text-[11px] text-text-secondary block mt-0.5 font-medium">
                           {t.dueDate(myEqub.nextDueDate[language], myEqub.dueDaysLeft)}
                         </span>
                       </div>
@@ -391,24 +391,24 @@ export const EqubPage: React.FC = () => {
 
                 {/* GENTLE CATCH-UP / OUTSTANDING NOTICE */}
                 {myEqub.hasOutstanding && myEqub.outstandingRound && (
-                  <section className="bg-[#FFFBF2] rounded-2xl p-4 border border-[#E9D8B4] shadow-[0_2px_10px_-2px_rgba(36,30,32,0.05)] flex items-start gap-3.5">
-                    <div className="w-10 h-10 rounded-xl bg-[#F5E7CE]/80 text-[#7D5709] flex items-center justify-center shrink-0 border border-[#7D5709]/20 text-[18px]">
+                  <section className="bg-amber-500/10 rounded-2xl p-4 border border-amber-500/25 shadow-sm flex items-start gap-3.5">
+                    <div className="w-10 h-10 rounded-xl bg-amber-500/20 text-amber-700 dark:text-amber-300 flex items-center justify-center shrink-0 border border-amber-500/20 text-[18px]">
                       ⏳
                     </div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center justify-between gap-2">
-                        <h3 className="text-[14px] font-bold text-[#644200]">{t.outstandingTitle}</h3>
-                        <span className="px-2 py-0.5 rounded-full bg-[#F5E7CE] text-[#7D5709] text-[11px] font-bold">
+                        <h3 className="text-[14px] font-bold text-amber-900 dark:text-amber-200">{t.outstandingTitle}</h3>
+                        <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-800 dark:text-amber-300 text-[11px] font-bold">
                           {t.outstandingRound(myEqub.outstandingRound)}
                         </span>
                       </div>
-                      <p className="text-[12px] text-[#63585B] mt-1 leading-relaxed">
+                      <p className="text-[12px] text-text-secondary mt-1 leading-relaxed">
                         {t.outstandingDesc(myEqub.outstandingAmount ?? 500, myEqub.outstandingRound)}
                       </p>
                       <div className="mt-3 flex items-center gap-2.5">
                         <button
                           onClick={() => setPaymentModalOpen(true)}
-                          className="h-8 px-3.5 rounded-lg bg-white border border-[#E2CEAA] text-[#644200] text-[12px] font-semibold flex items-center gap-1 shadow-sm hover:bg-white active:scale-95 transition-all"
+                          className="h-8 px-3.5 rounded-lg bg-bg-card border border-border-subtle text-text-primary text-[12px] font-semibold flex items-center gap-1 shadow-sm active:scale-95 transition-all"
                         >
                           <span>{t.viewDetails}</span>
                         </button>
@@ -424,32 +424,32 @@ export const EqubPage: React.FC = () => {
                 )}
 
                 {/* OPEN EQUB SPOTLIGHT PREVIEW */}
-                <section className="bg-white rounded-2xl p-4 border border-[#EDE6DB] shadow-[0_2px_10px_-2px_rgba(36,30,32,0.05)] flex flex-col gap-3">
+                <section className="bg-bg-card rounded-2xl p-4 border border-border-subtle shadow-sm flex flex-col gap-3">
                   <div className="flex items-center justify-between">
-                    <span className="text-[12px] font-bold text-[#63585B] uppercase tracking-wider">
+                    <span className="text-[12px] font-bold text-text-secondary uppercase tracking-wider">
                       {t.openSpotlightTitle}
                     </span>
-                    <span className="text-[11px] font-bold text-[#7A2330] bg-[#F9EDEF] px-2 py-0.5 rounded-full">
+                    <span className="text-[11px] font-bold text-[#7A2330] dark:text-[#E8886E] bg-brand-50 dark:bg-brand-950/40 px-2 py-0.5 rounded-full">
                       {t.closesIn(6)}
                     </span>
                   </div>
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-[#F5EFE6] flex items-center justify-center text-[#7A2330] shrink-0 border border-[#EDE6DB] text-[20px]">
+                      <div className="w-10 h-10 rounded-xl bg-bg-secondary flex items-center justify-center text-[#7A2330] shrink-0 border border-border-subtle text-[20px]">
                         📚
                       </div>
                       <div>
-                        <h4 className="text-[14px] font-bold text-[#201A1C] leading-snug">
+                        <h4 className="text-[14px] font-bold text-text-primary leading-snug">
                           {language === 'am' ? 'የደብረ ሊባኖስ እቁብ (ቅጽ 2)' : 'Debre Libanos Equb (Vol 2)'}
                         </h4>
-                        <p className="text-[11px] text-[#63585B]">
+                        <p className="text-[11px] text-text-secondary">
                           {language === 'am' ? '300 ብር/በወር · 18/20 አባላት (2 ቦታ ቀርቷል)' : '300 ETB/mo · 18/20 members (2 spots left)'}
                         </p>
                       </div>
                     </div>
                     <button
                       onClick={() => setActiveTab('open')}
-                      className="h-8 px-3 rounded-lg bg-[#F9EDEF] text-[#7A2330] border border-[#5C0B1C]/20 text-[11px] font-bold hover:bg-[#5C0B1C]/10 active:scale-95 transition-all shrink-0"
+                      className="h-8 px-3 rounded-lg bg-brand-50 dark:bg-brand-950/40 text-[#7A2330] dark:text-[#E8886E] border border-[#5C0B1C]/20 text-[11px] font-bold active:scale-95 transition-all shrink-0"
                     >
                       {t.details}
                     </button>
@@ -457,15 +457,15 @@ export const EqubPage: React.FC = () => {
                 </section>
 
                 {/* EDUCATIONAL & TRUST ASSURANCE CARD */}
-                <section className="bg-white rounded-2xl p-4 border border-[#EDE6DB] shadow-[0_2px_10px_-2px_rgba(36,30,32,0.05)] flex flex-col gap-2.5">
-                  <div className="flex items-center gap-2 text-[#7A2330]">
+                <section className="bg-bg-card rounded-2xl p-4 border border-border-subtle shadow-sm flex flex-col gap-2.5">
+                  <div className="flex items-center gap-2 text-[#7A2330] dark:text-[#E8886E]">
                     <span className="text-[20px]">📖</span>
                     <h3 className="text-[14px] font-bold">{t.whatIsEqubTitle}</h3>
                   </div>
-                  <p className="text-[12px] text-[#63585B] leading-relaxed">
+                  <p className="text-[12px] text-text-secondary leading-relaxed">
                     {t.whatIsEqubBody}
                   </p>
-                  <div className="pt-2 border-t border-[#EDE6DB]/60 flex items-center gap-1.5 text-emerald-800 text-[11px] font-semibold">
+                  <div className="pt-2 border-t border-border-subtle flex items-center gap-1.5 text-emerald-700 dark:text-emerald-400 text-[11px] font-semibold">
                     <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                       <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
                     </svg>
@@ -483,46 +483,46 @@ export const EqubPage: React.FC = () => {
             {openEqubs.map((group) => (
               <section
                 key={group.id}
-                className="bg-white rounded-2xl p-4 border border-[#EDE6DB] shadow-[0_2px_10px_-2px_rgba(36,30,32,0.05)] flex flex-col gap-3"
+                className="bg-bg-card rounded-2xl p-4 border border-border-subtle shadow-sm flex flex-col gap-3"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-[#F9EDEF] border border-[#5C0B1C]/10 flex items-center justify-center text-[#7A2330] shrink-0 text-[20px]">
+                    <div className="w-10 h-10 rounded-xl bg-brand-50/60 dark:bg-brand-950/40 border border-brand-500/20 flex items-center justify-center text-[#7A2330] dark:text-[#E8886E] shrink-0 text-[20px]">
                       {getEqubIcon(group.iconType)}
                     </div>
                     <div>
-                      <h3 className="text-[15px] font-bold text-[#201A1C]">{group.title[language]}</h3>
-                      <p className="text-[11px] text-[#63585B]">{group.subtitle[language]}</p>
+                      <h3 className="text-[15px] font-bold text-text-primary">{group.title[language]}</h3>
+                      <p className="text-[11px] text-text-secondary">{group.subtitle[language]}</p>
                     </div>
                   </div>
-                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#F9EDEF] text-[#7A2330] border border-[#5C0B1C]/20 shrink-0">
+                  <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-brand-50 dark:bg-brand-950/40 text-[#7A2330] dark:text-[#E8886E] border border-brand-500/20 shrink-0">
                     {t.closesIn(group.closesInDays)}
                   </span>
                 </div>
 
-                <div className="grid grid-cols-3 gap-2 bg-[#F5EFE6]/60 p-2.5 rounded-xl border border-[#EDE6DB]/60 text-center">
+                <div className="grid grid-cols-3 gap-2 bg-bg-secondary p-2.5 rounded-xl border border-border-subtle text-center">
                   <div>
-                    <span className="text-[10px] text-[#968A8E] block">{t.contributionLabel}</span>
-                    <span className="text-[13px] font-bold text-[#201A1C]">
+                    <span className="text-[10px] text-text-muted block">{t.contributionLabel}</span>
+                    <span className="text-[13px] font-bold text-text-primary">
                       {group.contributionAmount.toLocaleString()} {t.birr}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-[#968A8E] block">{t.membersLabel}</span>
-                    <span className="text-[13px] font-bold text-[#201A1C]">
+                    <span className="text-[10px] text-text-muted block">{t.membersLabel}</span>
+                    <span className="text-[13px] font-bold text-text-primary">
                       {group.currentMembers} / {group.maxMembers}
                     </span>
                   </div>
                   <div>
-                    <span className="text-[10px] text-[#968A8E] block">{t.voucherLabel}</span>
-                    <span className="text-[13px] font-bold text-[#7A2330]">
+                    <span className="text-[10px] text-text-muted block">{t.voucherLabel}</span>
+                    <span className="text-[13px] font-bold text-[#7A2330] dark:text-[#E8886E]">
                       {group.creditVoucherAmount.toLocaleString()} {t.birr}
                     </span>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between pt-1">
-                  <div className="flex items-center gap-1.5 text-[#63585B] text-[11px]">
+                  <div className="flex items-center gap-1.5 text-text-secondary text-[11px]">
                     <span className="text-emerald-700">🏪</span>
                     <span>{t.storeCreditOnly}</span>
                   </div>
@@ -544,38 +544,38 @@ export const EqubPage: React.FC = () => {
 
       {/* ── Payment Confirmation Modal ─────────────────────────────── */}
       {paymentModalOpen && myEqub && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-3xl p-5 w-full max-w-sm border border-[#EDE6DB] shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between pb-3 border-b border-[#EDE6DB]">
+        <div className="fixed inset-0 z-[75] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4 pb-28 sm:pb-4">
+          <div className="bg-bg-card rounded-3xl p-5 w-full max-w-sm border border-border-subtle shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
               <div className="flex items-center gap-2">
                 <span className="text-[20px]">🪙</span>
-                <h3 className="font-bold text-[16px] text-[#201A1C]">{t.confirmPaymentTitle}</h3>
+                <h3 className="font-bold text-[16px] text-text-primary">{t.confirmPaymentTitle}</h3>
               </div>
               <button
                 onClick={() => setPaymentModalOpen(false)}
-                className="w-8 h-8 rounded-full bg-[#F5EFE6] flex items-center justify-center text-[#63585B] text-[16px]"
+                className="w-8 h-8 rounded-full bg-bg-secondary flex items-center justify-center text-text-muted hover:text-text-primary text-[16px]"
               >
                 ✕
               </button>
             </div>
 
             <div className="py-4 space-y-3">
-              <div className="p-3 bg-[#FAF3F4] rounded-2xl border border-[#5C0B1C]/15 flex items-center justify-between">
+              <div className="p-3 bg-bg-secondary rounded-2xl border border-brand-500/20 flex items-center justify-between">
                 <div>
-                  <span className="text-[11px] text-[#63585B] block">{myEqub.name[language]}</span>
-                  <span className="font-bold text-[15px] text-[#7A2330]">
+                  <span className="text-[11px] text-text-secondary block">{myEqub.name[language]}</span>
+                  <span className="font-bold text-[15px] text-[#7A2330] dark:text-[#E8886E]">
                     {t.roundOf(myEqub.currentRound, myEqub.totalRounds)}
                   </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-[11px] text-[#63585B] block">{t.contributionLabel}</span>
-                  <span className="text-[18px] font-extrabold text-[#201A1C]">
+                  <span className="text-[11px] text-text-secondary block">{t.contributionLabel}</span>
+                  <span className="text-[18px] font-extrabold text-text-primary">
                     {myEqub.nextContributionAmount} {t.birr}
                   </span>
                 </div>
               </div>
 
-              <p className="text-[12px] text-[#63585B] leading-relaxed">
+              <p className="text-[12px] text-text-secondary leading-relaxed">
                 {t.fromWalletDesc}
               </p>
             </div>
@@ -583,14 +583,14 @@ export const EqubPage: React.FC = () => {
             <div className="flex items-center gap-2 pt-2">
               <button
                 onClick={() => setPaymentModalOpen(false)}
-                className="flex-1 py-3 rounded-xl border border-[#EDE6DB] font-semibold text-[13px] text-[#63585B] active:scale-95 transition-transform"
+                className="flex-1 py-3 rounded-xl border border-border-subtle font-semibold text-[13px] text-text-secondary hover:text-text-primary bg-bg-secondary active:scale-95 transition-transform"
               >
                 {t.cancel}
               </button>
               <button
                 onClick={() => handlePay(myEqub.nextContributionAmount, myEqub.currentRound)}
                 disabled={payContributionMutation.isPending}
-                className="flex-1 py-3 rounded-xl bg-[#7A2330] text-white font-bold text-[13px] shadow-sm active:scale-95 transition-transform disabled:opacity-50"
+                className="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#7a2330] to-[#9E2B3E] text-white font-bold text-[13px] shadow-sm active:scale-95 transition-transform disabled:opacity-50"
               >
                 {payContributionMutation.isPending ? '...' : t.confirmPay}
               </button>
@@ -601,33 +601,33 @@ export const EqubPage: React.FC = () => {
 
       {/* ── Join Equb Modal ────────────────────────────────────────── */}
       {joinModalGroup && (
-        <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-sm p-4">
-          <div className="bg-white rounded-3xl p-5 w-full max-w-sm border border-[#EDE6DB] shadow-2xl animate-in fade-in zoom-in-95 duration-200">
-            <div className="flex items-center justify-between pb-3 border-b border-[#EDE6DB]">
+        <div className="fixed inset-0 z-[75] flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4 pb-28 sm:pb-4">
+          <div className="bg-bg-card rounded-3xl p-5 w-full max-w-sm border border-border-subtle shadow-2xl animate-in fade-in zoom-in-95 duration-200">
+            <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
               <div className="flex items-center gap-2">
                 <span className="text-[20px]">👥</span>
-                <h3 className="font-bold text-[16px] text-[#201A1C]">{t.joinModalTitle}</h3>
+                <h3 className="font-bold text-[16px] text-text-primary">{t.joinModalTitle}</h3>
               </div>
               <button
                 onClick={() => setJoinModalGroup(null)}
-                className="w-8 h-8 rounded-full bg-[#F5EFE6] flex items-center justify-center text-[#63585B] text-[16px]"
+                className="w-8 h-8 rounded-full bg-bg-secondary flex items-center justify-center text-text-muted hover:text-text-primary text-[16px]"
               >
                 ✕
               </button>
             </div>
 
             <div className="py-4 space-y-3">
-              <div className="p-3 bg-[#FAF3F4] rounded-2xl border border-[#5C0B1C]/15">
-                <h4 className="font-bold text-[14px] text-[#7A2330]">
+              <div className="p-3 bg-bg-secondary rounded-2xl border border-brand-500/20">
+                <h4 className="font-bold text-[14px] text-[#7A2330] dark:text-[#E8886E]">
                   {joinModalGroup.title[language]}
                 </h4>
-                <div className="flex justify-between items-center mt-2 text-[12px] text-[#63585B]">
+                <div className="flex justify-between items-center mt-2 text-[12px] text-text-secondary">
                   <span>{t.contributionLabel}: {joinModalGroup.contributionAmount} {t.birr}</span>
                   <span>{t.voucherLabel}: {joinModalGroup.creditVoucherAmount.toLocaleString()} {t.birr}</span>
                 </div>
               </div>
 
-              <p className="text-[12px] text-[#63585B] leading-relaxed">
+              <p className="text-[12px] text-text-secondary leading-relaxed">
                 {t.joinModalDesc}
               </p>
             </div>
@@ -635,14 +635,14 @@ export const EqubPage: React.FC = () => {
             <div className="flex items-center gap-2 pt-2">
               <button
                 onClick={() => setJoinModalGroup(null)}
-                className="flex-1 py-3 rounded-xl border border-[#EDE6DB] font-semibold text-[13px] text-[#63585B] active:scale-95 transition-transform"
+                className="flex-1 py-3 rounded-xl border border-border-subtle font-semibold text-[13px] text-text-secondary hover:text-text-primary bg-bg-secondary active:scale-95 transition-transform"
               >
                 {t.cancel}
               </button>
               <button
                 onClick={() => handleJoin(joinModalGroup)}
                 disabled={joinEqubMutation.isPending}
-                className="flex-1 py-3 rounded-xl bg-[#7A2330] text-white font-bold text-[13px] shadow-sm active:scale-95 transition-transform disabled:opacity-50"
+                className="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#7a2330] to-[#9E2B3E] text-white font-bold text-[13px] shadow-sm active:scale-95 transition-transform disabled:opacity-50"
               >
                 {joinEqubMutation.isPending ? '...' : t.confirmJoin}
               </button>

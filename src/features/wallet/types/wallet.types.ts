@@ -48,4 +48,8 @@ export interface WalletService {
   getTransactions: (category?: TransactionCategory) => Promise<WalletTransaction[]>;
   getPendingDeposits: () => Promise<PendingDeposit[]>;
   getPaymentAccounts: () => Promise<PaymentAccount[]>;
+  deductBalance: (
+    amount: number,
+    tx: { titleAm: string; titleEn: string; reference?: string }
+  ) => Promise<{ success: boolean; newBalance: number; transaction: WalletTransaction }>;
 }
